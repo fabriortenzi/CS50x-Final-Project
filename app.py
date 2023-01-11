@@ -17,4 +17,6 @@ Session(app)
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///budget.db")
 
-
+@app.route("/")
+def index():
+    return render_template("layout.html")
