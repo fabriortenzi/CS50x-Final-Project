@@ -1,0 +1,26 @@
+{% extends "login-layout.html" %}
+
+{% block title %}
+    Sign Up
+{% endblock %}
+
+{% block main %}
+<div class="login-card-header">
+    <h1>Create Account</h1>
+</div>
+<form class="login-card-form" action="/signup" method="post">
+    <div class="form-item">
+        <span class="form-item-icon material-symbols-rounded">account_circle</span>
+        <input type="text" name="username" placeholder="Enter Username" required autofocus>
+    </div>
+    <div class="form-item">
+        <span class="form-item-icon material-symbols-rounded">lock</span>
+        <input type="password" name="password" placeholder="Enter Password" required>
+    </div>
+    <div class="form-item">
+        <span class="form-item-icon material-symbols-rounded">lock</span>
+        <input type="password" name="confirmation" placeholder="Confrm Password" required>
+    </div>
+    <button type="submit">Sign Up</button>
+</form>
+{% endblock %}

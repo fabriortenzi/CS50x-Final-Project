@@ -12,21 +12,30 @@ body
 
 .login-card
 {
-    width: 450px;
+    width: 400px;
     background: rgba(255, 255, 255, .5);
-    padding: 4rem;
+    padding: 3rem;
     border-radius: 10px;
     position: relative;
 }
 
 .login-card-logo
 {
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 }
 
 .login-card-logo img
 {
-    width: 60px;
+    width: 70px;
+}
+
+.logo-font
+{
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 40px;
+    text-decoration: none;
+    padding-left: 2px;
 }
 
 .login-card-logo,
@@ -34,6 +43,14 @@ body
 .login-card-footer
 {
     text-align: center;
+}
+
+.login-card-logo
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 70px;
 }
 
 .login-card a:hover
@@ -109,8 +126,37 @@ body
     outline: none;
     background: rgba(255, 255, 255, .3);
     padding: 1rem 1.5rem;
-    padding-left: calc(1.5rem * 3.5);
+    padding-left: calc(1.5rem * 2.5);
     border-radius: 100px;
     width: 100%;
     transition: background .5s;
+}
+
+.login-card input:focus
+{
+    background: white;
+}
+
+.login-card input[type="checkbox"]
+{
+    width: 16px;
+    height: 16px;
+    accent-color: black;
+}
+
+.login-card-form button
+{
+    background: black;
+    color: white;
+    padding: 1rem;
+    border-radius: 100px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: background .5s;
+}
+
+.login-card-form button:hover
+{
+    background-color: rgba(0, 0, 0, .85);
+    cursor: pointer;
 }

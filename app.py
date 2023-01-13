@@ -35,7 +35,7 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login():
     """Log user in"""
 
@@ -45,3 +45,47 @@ def login():
     # GET
     if request.method == "GET":
         return render_template("login.html")
+    
+    # POST
+    else:
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        password_db = db.execute("SELECT hash FROM users WHERE username = ?", username)
+
+        #bug in check password        
+        if check_password_hash(password_db, password):
+            print("hola")
+            return redirect("/")
+        else:
+            print("chau")
+            return redirect("/login")
+
+
+@app.route("/signup", methods=["GET", "POST"])
+def signup():
+    """Create account"""
+
+    # GET
+    if request.method == "GET":
+        return render_template("/signup.html")
+
+    # POST
+    else:
+        username = request.form.get("username")
+        password = request.form.get("password")
+        confirmation = request.form.get("confirmation")
+
+        if db.execute("SELECT username FROM users WHERE username = ?", username):
+            return redirect("/")
+            # Complete
+
+        if password != confirmation:
+            return redirect("/")
+            # Complete
+        
+        db.execute("INSERT INTO users (username, hash) VALUES(?, ?)",
+                   username, generate_password_hash(password, method='pbkdf2:sha256', salt_length=8))
+                
+        return redirect("/")
+
