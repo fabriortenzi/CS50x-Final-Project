@@ -51,15 +51,29 @@ def login():
         username = request.form.get("username")
         password = request.form.get("password")
 
-        password_db = db.execute("SELECT hash FROM users WHERE username = ?", username)
+        # Query database for username
+        rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
 
-        #bug in check password        
-        if check_password_hash(password_db, password):
-            print("hola")
-            return redirect("/")
-        else:
-            print("chau")
-            return redirect("/login")
+        # Ensure username exists and password is correct
+        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+            return ("invalid username and/or password")
+
+        # Remember which user has logged in
+        session["user_id"] = rows[0]["id"]        
+
+        # Redirect user to home page
+        return redirect("/")
+
+
+@app.route("/logout")
+def logout():
+    """Log user out"""
+
+    # Forget any user_id
+    session.clear()
+
+    # Redirect user to login form
+    return redirect("/")
 
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -89,3 +103,22 @@ def signup():
                 
         return redirect("/")
 
+
+@app.route("/expense", methods=["GET", "POST"])
+@login_required
+def expense():
+    """Add an Expense"""
+
+    # GET
+    if request.method == "GET":
+
+        # Get the expense categories
+        categories = db.execute("SELECT name FROM expense_categories")
+
+        list_categories = []
+        for i in range(len(categories)):
+            list_categories.append(categories[i]['name'])
+        
+        return render_template("expense.html", categories=list_categories)
+
+    # POST

@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Add Expense
+{% endblock %}
+
+{% block main %}
+    <form action="/expense" class="expense-form" method="post">
+        <div class="amount">
+            Amount
+            <input type="text" placeholder="$">
+        </div>
+        <div class="categories">
+            <p>Select a category</p>
+            {% for category in categories %}
+                <div class="form-check form-check-inline text-categories">
+                    <input class="form-check-input" type="checkbox" id={{category}} value={{category}} name={{category}}>
+                    <label class="form-check-label" for={{category}}>{{category}}</label>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="date">
+            Date: 
+            <input type="date">
+        </div>
+        <button type="submit" id="bt1">Add Expense</button>
+    </form>
+{% endblock %}
