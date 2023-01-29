@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Poppins:wght@300;500&display=swap');
 
+
 .logo
 {
     display: flex; 
@@ -39,19 +40,35 @@
     font-weight: 300;
     font-size: 20px;
     margin-top: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px 20px;
 }
 
 .text-categories
 {
     font-family: 'Poppins', sans-serif;
     font-weight: 300;
-    font-size: 15px;
+    font-size: 17px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.item-center
+{
+    margin-left: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 5px;
 }
 
 .expense-form button
 {
     margin-top: 50px;    
-    background: rgba(255, 2, 9, 1);
     color: white;
     padding: .5rem;
     border-radius: 25px;
@@ -61,10 +78,24 @@
     width: 200px;
 }
 
-.expense-form button:hover
+#bt-exp
+{
+    background: rgba(255, 2, 9, 1);
+}
+
+#bt-inc
+{
+    background: rgba(0, 194, 18, 1);
+}
+
+#bt-exp:hover
 {
     background-color: rgba(255, 2, 9, 0.82);
-    cursor: pointer;
+}
+
+#bt-inc:hover
+{
+    background-color: rgba(0, 194, 18, 0.82);
 }
 
 .date

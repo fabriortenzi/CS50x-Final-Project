@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Add Expense
+    Add Income
 {% endblock %}
 
 {% block main %}
-    <form action="/expense" class="expense-form" method="post">
+    <form action="/income" class="expense-form" method="post">
         <div class="amount">
             Amount
             <input type="text" placeholder="$" name="amount" required autocomplete="off">
@@ -28,6 +28,6 @@
             Date: 
             <input type="date" name="date" required>
         </div>
-        <button type="submit" id="bt-exp">Add Expense</button>
+        <button type="submit" id="bt-inc">Add Income</button>
     </form>
 {% endblock %}

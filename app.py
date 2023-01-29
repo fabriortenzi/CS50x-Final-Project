@@ -5,6 +5,7 @@ from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
+from flask_debugtoolbar import DebugToolbarExtension
 
 from helpers import login_required
 
@@ -113,12 +114,52 @@ def expense():
     if request.method == "GET":
 
         # Get the expense categories
-        categories = db.execute("SELECT name FROM expense_categories")
+        categories = db.execute("SELECT * FROM expense_categories ORDER BY name")
 
-        list_categories = []
-        for i in range(len(categories)):
-            list_categories.append(categories[i]['name'])
-        
-        return render_template("expense.html", categories=list_categories)
+        return render_template("expense.html", categories=categories)
 
     # POST
+    else:
+        amount = request.form.get("amount")
+        category_id = request.form.get("category")
+        date = request.form.get("date")
+
+        # Record the expense
+        db.execute("INSERT INTO expenses (date, total, user_id, category_id) VALUES(?, ?, ?, ?)",
+                   date, amount, session["user_id"], category_id)
+        
+        # Update user's cash
+        db.execute("UPDATE users SET cash = cash - ? WHERE id = ?", amount, session["user_id"])
+
+        return redirect("/")
+
+
+@app.route("/income", methods=["GET", "POST"])
+@login_required
+def income():
+    """Add an Income"""
+
+    # GET
+    if request.method == "GET":
+
+        # Get the income categories
+        categories = db.execute("SELECT * FROM income_categories ORDER BY name")
+
+        return render_template("income.html", categories=categories)
+
+    # POST
+    else:
+        amount = request.form.get("amount")
+        category_id = request.form.get("category")
+        date = request.form.get("date")
+
+        print(amount, category_id, date)
+
+        # Record the income
+        db.execute("INSERT INTO incomes (date, total, user_id, category_id) VALUES(?, ?, ?, ?)",
+                   date, amount, session["user_id"], category_id)
+        
+        # Update user's cash
+        db.execute("UPDATE users SET cash = cash + ? WHERE id = ?", amount, session["user_id"])
+
+        return redirect("/")
