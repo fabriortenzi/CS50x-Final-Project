@@ -5,7 +5,6 @@ from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
-from flask_debugtoolbar import DebugToolbarExtension
 
 from helpers import login_required
 
@@ -33,6 +32,23 @@ def after_request(response):
 @app.route("/")
 @login_required
 def index():
+
+    # Consult database for expense categories
+    categories = db.execute("SELECT * FROM expense_categories")
+
+    # Consult database for user's expenses
+    expenses = db.execute("SELECT SUM(expenses.total) AS total, expense_categories.name FROM expenses JOIN expense_categories ON expenses.category_id = expense_categories.id WHERE user_id = ? GROUP BY category_id ORDER BY expense_categories.name",
+                          session["user_id"])
+    
+    # Calculate percentage of each category
+    sum = 0
+    for i in range(len(expenses)):
+        sum += expenses[i]["total"]
+    for i in range(len(expenses)):
+        expenses[i]["total"] = round(((expenses[i]["total"] / sum) * 100), 1)
+
+    print(expenses)
+
     return render_template("index.html")
 
 

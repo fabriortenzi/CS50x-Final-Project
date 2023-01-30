@@ -1,3 +1,5 @@
+<!-- Circular progress bars inspired by https://www.youtube.com/watch?v=8a9f8hG6M5A&t=13s -->
+
 {% extends "layout.html" %}
 
 {% block title %}
@@ -5,4 +7,57 @@
 {% endblock %}
 
 {% block main %}
+    <div class="bars">
+        <div class="all">
+            <div class="circle-wrap">
+                <div class="circle">
+                    <!-- 1st part -->
+                    <div class="mask full-1">
+                        <div class="fill-1"></div>
+                    </div>
+                    <!-- 2nd part -->
+                    <div class="mask half">
+                        <div class="fill-1"></div>
+                    </div>
+                    <!-- Number -->
+                    <div class="inside-circle">80%</div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="all">
+            <div class="circle-wrap">
+                <div class="circle">
+                    <!-- 1st part -->
+                    <div class="mask full-1">
+                        <div class="fill-2"></div>
+                    </div>
+                    <!-- 2nd part -->
+                    <div class="mask half">
+                        <div class="fill-2"></div>
+                    </div>                    
+                    <!-- Number -->
+                    <div class="inside-circle">80%</div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="all">
+            <div class="circle-wrap">
+                <div class="circle">
+                    <!-- 1st part -->
+                    <div class="mask full-1">
+                        <div class="fill-3"></div>
+                    </div>
+                    <!-- 2nd part -->
+                    <div class="mask half">
+                        <div class="fill-3"></div>
+                    </div>                    
+                    <!-- Number -->
+                    <div class="inside-circle">80%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 {% endblock %}
