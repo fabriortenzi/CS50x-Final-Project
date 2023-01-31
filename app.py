@@ -33,23 +33,44 @@ def after_request(response):
 @login_required
 def index():
 
+    # Consult database for user's balance
+    balance = db.execute("SELECT balance FROM users WHERE id = ?", session["user_id"])
+
+    balance = balance[0]["balance"]
+    
     # Consult database for expense categories
-    categories = db.execute("SELECT * FROM expense_categories")
+    categories = db.execute("SELECT id, name, color FROM expense_categories")
+
+    for category in categories:
+        category["percentage"] = 0
+        category["degree"] = 0
 
     # Consult database for user's expenses
-    expenses = db.execute("SELECT SUM(expenses.total) AS total, expense_categories.name FROM expenses JOIN expense_categories ON expenses.category_id = expense_categories.id WHERE user_id = ? GROUP BY category_id ORDER BY expense_categories.name",
+    expenses = db.execute("SELECT SUM(expenses.total) AS total, expense_categories.name, expense_categories.id FROM expenses JOIN expense_categories ON expenses.category_id = expense_categories.id WHERE user_id = ? GROUP BY category_id ORDER BY expense_categories.name",
                           session["user_id"])
     
     # Calculate percentage of each category
     sum = 0
     for i in range(len(expenses)):
         sum += expenses[i]["total"]
+
     for i in range(len(expenses)):
         expenses[i]["total"] = round(((expenses[i]["total"] / sum) * 100), 1)
 
-    print(expenses)
+    for expense in expenses:
+        for category in categories:
+            if expense["id"] == category["id"]:
+                category["percentage"] = expense["total"]
+                category["degree"] = round(((category["percentage"] / 100) * 180), 1)
+                break
 
-    return render_template("index.html")
+    fill = []
+    for i in range(1, len(categories) + 1):
+        fill.append("fill-"+str(i))
+
+    print(fill)
+
+    return render_template("index.html", categories=categories, balance=balance, number=120, bar_color="blue", fill=fill)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -145,7 +166,8 @@ def expense():
                    date, amount, session["user_id"], category_id)
         
         # Update user's cash
-        db.execute("UPDATE users SET cash = cash - ? WHERE id = ?", amount, session["user_id"])
+        db.execute("UPDATE users SET balance = balance - ? WHERE id = ?", amount, session["user_id"])
+        db.execute("UPDATE users SET total_expenses = total_expenses + ? WHERE id = ?", amount, session["user_id"])
 
         return redirect("/")
 

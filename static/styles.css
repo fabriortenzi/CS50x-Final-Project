@@ -108,8 +108,17 @@
 
 /* Progress bars */
 
+.container-bars
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .bars
 {
+    width: 1200px;
+    flex-wrap: wrap;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -118,6 +127,17 @@
 .all
 {
     display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.name-bar
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
 }
 
 .circle-wrap
@@ -147,31 +167,6 @@
 .circle-wrap .circle .mask 
 {
     clip: rect(0px, 150px, 150px, 75px);
-}
-
-.mask .fill-1 
-{
-    clip: rect(0px, 75px, 150px, 0px);
-    background-color: #ec0c0c;
-}
-
-.mask.full-1,
-.circle .fill-1 
-{
-    animation: fill-1 ease-in-out 3s;
-    transform: rotate(153deg);
-}
-
-@keyframes fill-1 
-{
-    0% 
-    {
-        transform: rotate(0deg);
-    }
-    100% 
-    {
-        transform: rotate(153deg);
-    }
 }
 
 .mask .fill-2 
