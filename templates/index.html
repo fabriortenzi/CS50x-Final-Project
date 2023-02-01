@@ -2,54 +2,75 @@
 
 {% extends "layout.html" %}
 
+{% block head %}
+<style>
+
+    :root
+    {
+        {% for i in range(categories|length) %}
+            --color-bar{{i + 1}}: {{ categories[i]["color"] }};
+        {% endfor %}
+    }
+
+    {% for i in range(categories|length) %}
+
+        .circle-wrap .circle .fill-{{ i + 1 }}
+        {
+            width: 145px;
+            height: 145px;
+            position: absolute;
+            border-radius: 50%;
+        }
+
+        .mask .fill-{{ i + 1 }} {
+            clip: rect(0px, 75px, 150px, 0px);
+            background-color: var(--color-bar{{i + 1}});
+        }
+
+        .mask.full-{{ i + 1}},
+        .circle .fill-{{ i + 1 }} 
+        {
+            animation: fill-{{ i + 1 }} ease-in-out 1.5s;
+            transform: rotate({{ categories[i]["degree"] }}deg);
+        }
+
+        @keyframes fill-{{ i + 1 }} 
+        {
+            0% 
+            {
+                transform: rotate(0deg);
+            }
+            100% 
+            {
+                transform: rotate({{ categories[i]["degree"] }}deg);
+            }
+        }
+
+    {% endfor %}
+</style>
+{% endblock %}
+
 {% block title %}
     Balance
 {% endblock %}
 
 {% block main %}
-    <p>Your Balance: ${{balance}}</p>
+    <p id="text-expenses">Expenses by category</p>
     <div class="container-bars"> 
         <div class="bars">        
             {% for i in range(categories|length) %}
             <div class="all">
                 <div class="name-bar">
-                    {{ categories[i]["name"] }}
-                    <style>
-                        :root
-                        {
-                            --color-bar{{i + 1}}: {{ categories[i]["color"] }};
-                        }
-
-                        .mask .fill-{{i + 1}} 
-                        {
-                            clip: rect(0px, 75px, 150px, 0px);
-                            background-color: var(--color-bar{{i + 1}});
-                        }
-
-                        .mask.full-1,
-                        .circle .fill-{{i + 1}} 
-                        {
-                            animation: fill-1 ease-in-out 3s;
-                            transform: rotate({{ categories[i]["degree"] }}deg);
-                        }
-
-                        @keyframes fill-{{i + 1}} 
-                        {
-                            0% 
-                            {
-                                transform: rotate(0deg);
-                            }
-                            100% 
-                            {
-                                transform: rotate({{ categories[i]["degree"] }}deg);
-                            }
-                        }
-
-                    </style>
+                    <span class="material-symbols-outlined" style="margin-right: 3px;">
+                        {{ categories[i]["icon"] }}
+                    </span>
+                    <p>
+                        {{ categories[i]["name"] }}
+                    </p>
                     <div class="circle-wrap">
                         <div class="circle">
                             <!-- 1st part -->
-                            <div class="mask full-1">
+                            <div class={{ mask[i] }}>
                                 <div class={{ fill[i] }}></div>
                             </div>
                             <!-- 2nd part -->
@@ -63,40 +84,6 @@
                 </div>
             </div>
             {% endfor %}
-        
-            <!--<div class="all">
-                <div class="circle-wrap">
-                    <div class="circle">
-                        1st part 
-                        <div class="mask full-1">
-                            <div class="fill-2"></div>
-                        </div>
-                        2nd part
-                        <div class="mask half">
-                            <div class="fill-2"></div>
-                        </div>                    
-                        Number 
-                        <div class="inside-circle">80%</div>
-                    </div>
-                </div>
-            </div> -->
-        
-            <!--<div class="all">
-                <div class="circle-wrap">
-                    <div class="circle">
-                        
-                        <div class="mask full-1">
-                            <div class="fill-3"></div>
-                        </div>
-                        
-                        <div class="mask half">
-                            <div class="fill-3"></div>
-                        </div>                    
-                        
-                        <div class="inside-circle">80%</div>
-                    </div>
-                </div>
-            </div>-->
         </div>
     </div>    
 {% endblock %}

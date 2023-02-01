@@ -6,10 +6,13 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import login_required
+from helpers import login_required, usd
 
 # Configure application
 app = Flask(__name__)
+
+# Custom filter
+app.jinja_env.filters["usd"] = usd
 
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_PERMANENT"] = False
@@ -39,15 +42,17 @@ def index():
     balance = balance[0]["balance"]
     
     # Consult database for expense categories
-    categories = db.execute("SELECT id, name, color FROM expense_categories")
+    categories = db.execute("SELECT * FROM expense_categories")
 
     for category in categories:
         category["percentage"] = 0
         category["degree"] = 0
 
     # Consult database for user's expenses
-    expenses = db.execute("SELECT SUM(expenses.total) AS total, expense_categories.name, expense_categories.id FROM expenses JOIN expense_categories ON expenses.category_id = expense_categories.id WHERE user_id = ? GROUP BY category_id ORDER BY expense_categories.name",
+    expenses = db.execute("SELECT SUM(expenses.total) AS total, expense_categories.name, expense_categories.id FROM expenses JOIN expense_categories ON expenses.category_id = expense_categories.id WHERE user_id = ? GROUP BY category_id",
                           session["user_id"])
+    
+    print(expenses)
     
     # Calculate percentage of each category
     sum = 0
@@ -61,16 +66,16 @@ def index():
         for category in categories:
             if expense["id"] == category["id"]:
                 category["percentage"] = expense["total"]
-                category["degree"] = round(((category["percentage"] / 100) * 180), 1)
+                category["degree"] = round(((category["percentage"] / 100) * 360), 1)
                 break
 
     fill = []
+    mask = []
     for i in range(1, len(categories) + 1):
         fill.append("fill-"+str(i))
+        mask.append("mask full-"+str(i))
 
-    print(fill)
-
-    return render_template("index.html", categories=categories, balance=balance, number=120, bar_color="blue", fill=fill)
+    return render_template("index.html", categories=categories, balance=balance, mask=mask, fill=fill)
 
 
 @app.route("/login", methods=["GET", "POST"])

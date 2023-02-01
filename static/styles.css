@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Poppins:wght@300;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Poppins:wght@300;500&display=swap');
 
 
 .logo
@@ -106,7 +106,7 @@
     font-size: 20px;
 }
 
-/* Progress bars */
+/* Progress bar */
 
 .container-bars
 {
@@ -145,84 +145,30 @@
     display: grid;
     grid-template-columns: repeat(1, 160px);
     grid-gap: 80px;
-    margin-top: 100px;
-    margin-left: 50px;
-    width: 150px;
-    height: 150px;
+    margin-top: 10px;
+    width: 145px;
+    height: 145px;
     background: #d9d7da;
     border-radius: 50%;
 }
 
-.circle-wrap .circle .mask,
-.circle-wrap .circle .fill-1,
-.circle-wrap .circle .fill-2,
-.circle-wrap .circle .fill-3 
+.circle-wrap .circle .mask
 {
-    width: 150px;
-    height: 150px;
+    width: 145px;
+    height: 145px;
     position: absolute;
     border-radius: 50%;
 }
 
 .circle-wrap .circle .mask 
 {
-    clip: rect(0px, 150px, 150px, 75px);
-}
-
-.mask .fill-2 
-{
-    clip: rect(0px, 75px, 150px, 0px);
-    background-color: green;
-}
-
-.mask.full-2,
-.circle .fill-2 
-{
-    animation: fill-2 ease-in-out 3s;
-    transform: rotate(153deg);
-}
-
-@keyframes fill-2 
-{
-    0% 
-    {
-        transform: rotate(0deg);
-    }
-    100% 
-    {
-        transform: rotate(153deg);
-    }
-}
-
-.mask .fill-3 
-{
-    clip: rect(0px, 75px, 150px, 0px);
-    background-color: blue;
-}
-
-.mask.full-3,
-.circle .fill-3 
-{
-    animation: fill-3 ease-in-out 3s;
-    transform: rotate(153deg);
-}
-
-@keyframes fill-3 
-{
-    0% 
-    {
-        transform: rotate(0deg);
-    }
-    100% 
-    {
-        transform: rotate(153deg);
-    }
+    clip: rect(0px, 145px, 145px, 75px);
 }
 
 .circle-wrap .inside-circle 
 {
-    width: 124px;
-    height: 124px;
+    width: 118px;
+    height: 118px;
     border-radius: 50%;
     background: white;
     line-height: 120px;
@@ -234,4 +180,26 @@
     z-index: 100;
     font-weight: 600;
     font-size: 2em;
-  }
+}
+
+#total-balance
+{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 30px;
+}
+
+#text-expenses
+{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+}
+
+.name-bar p
+{
+    margin: 0px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+}
