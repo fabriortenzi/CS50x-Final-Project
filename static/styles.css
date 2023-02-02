@@ -137,7 +137,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 20px;
+    margin: 12px;
 }
 
 .circle-wrap
@@ -194,6 +194,9 @@
     font-family: 'Montserrat', sans-serif;
     font-weight: 400;
     font-size: 20px;
+    text-align: center;
+    padding-top: 18px;
+
 }
 
 .name-bar p
@@ -202,4 +205,39 @@
     font-family: 'Montserrat', sans-serif;
     font-weight: 400;
     font-size: 15px;
+}
+
+.table-container
+{
+    margin: 60px;
+}
+
+.table-center-text
+{
+    vertical-align: middle;
+}
+
+.table-center-text-and-icons
+{
+    vertical-align: middle; 
+    display: flex; 
+    align-items: center;
+}
+
+#balance-number
+{
+    margin-top: 20px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 30px;
+    text-align: center;
+}
+
+.total-income-expenses-container
+{
+    display: flex;
+    justify-content: space-around;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 17px;
 }

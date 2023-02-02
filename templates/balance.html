@@ -1,5 +1,4 @@
 <!-- Circular progress bars inspired by https://www.youtube.com/watch?v=8a9f8hG6M5A&t=13s -->
-
 {% extends "layout.html" %}
 
 {% block head %}
@@ -51,12 +50,17 @@
 {% endblock %}
 
 {% block title %}
-    Main
+    Balance
 {% endblock %}
 
 {% block main %}
-    <main class="main-index">
-        <p id="text-expenses">Expenses by category</p>
+    <main>
+        <p id="balance-number">Your Balance: {{ balance|usd }}</p>
+        <div class="total-income-expenses-container">
+            <p>Total Income: {{ income_number|usd }}</p>
+            <p>Total Expenses: {{ expenses|usd }}</p>
+        </div>
+        <p id="text-expenses">Income by category</p>
         <div class="container-bars"> 
             <div class="bars">        
                 {% for i in range(categories|length) %}
@@ -87,5 +91,5 @@
                 {% endfor %}
             </div>
         </div>   
-    </main> 
+    </main>
 {% endblock %}

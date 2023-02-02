@@ -5,6 +5,7 @@ from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
+import datetime
 
 from helpers import login_required, usd
 
@@ -35,11 +36,6 @@ def after_request(response):
 @app.route("/")
 @login_required
 def index():
-
-    # Consult database for user's balance
-    balance = db.execute("SELECT balance FROM users WHERE id = ?", session["user_id"])
-
-    balance = balance[0]["balance"]
     
     # Consult database for expense categories
     categories = db.execute("SELECT * FROM expense_categories")
@@ -51,8 +47,6 @@ def index():
     # Consult database for user's expenses
     expenses = db.execute("SELECT SUM(expenses.total) AS total, expense_categories.name, expense_categories.id FROM expenses JOIN expense_categories ON expenses.category_id = expense_categories.id WHERE user_id = ? GROUP BY category_id",
                           session["user_id"])
-    
-    print(expenses)
     
     # Calculate percentage of each category
     sum = 0
@@ -75,7 +69,7 @@ def index():
         fill.append("fill-"+str(i))
         mask.append("mask full-"+str(i))
 
-    return render_template("index.html", categories=categories, balance=balance, mask=mask, fill=fill)
+    return render_template("index.html", categories=categories, mask=mask, fill=fill)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -163,6 +157,7 @@ def expense():
     # POST
     else:
         amount = request.form.get("amount")
+        amount = -(int(amount))
         category_id = request.form.get("category")
         date = request.form.get("date")
 
@@ -171,7 +166,7 @@ def expense():
                    date, amount, session["user_id"], category_id)
         
         # Update user's cash
-        db.execute("UPDATE users SET balance = balance - ? WHERE id = ?", amount, session["user_id"])
+        db.execute("UPDATE users SET balance = balance + ? WHERE id = ?", amount, session["user_id"])
         db.execute("UPDATE users SET total_expenses = total_expenses + ? WHERE id = ?", amount, session["user_id"])
 
         return redirect("/")
@@ -196,13 +191,76 @@ def income():
         category_id = request.form.get("category")
         date = request.form.get("date")
 
-        print(amount, category_id, date)
-
         # Record the income
         db.execute("INSERT INTO incomes (date, total, user_id, category_id) VALUES(?, ?, ?, ?)",
                    date, amount, session["user_id"], category_id)
         
         # Update user's cash
-        db.execute("UPDATE users SET cash = cash + ? WHERE id = ?", amount, session["user_id"])
+        db.execute("UPDATE users SET balance = balance + ? WHERE id = ?", amount, session["user_id"])
+        db.execute("UPDATE users SET total_income = total_income + ? WHERE id = ?", amount, session["user_id"])
 
         return redirect("/")
+
+
+@app.route("/balance")
+@login_required
+def balance():
+    """Show user's balance"""
+
+    # Get user's balance
+    balance = db.execute("SELECT balance FROM users WHERE id = ?", session["user_id"])
+    balance = balance[0]["balance"]
+
+    # Get user's total income and expenses
+    income_number = db.execute("SELECT total_income FROM users WHERE id = ?", session["user_id"])
+    income_number = income_number[0]["total_income"]
+    expenses = db.execute("SELECT total_expenses FROM users WHERE id = ?", session["user_id"])
+    expenses = expenses[0]["total_expenses"]
+
+    # Consult database for income categories
+    categories = db.execute("SELECT * FROM income_categories")
+
+    for category in categories:
+        category["percentage"] = 0
+        category["degree"] = 0
+
+    # Consult database for user's income
+    incomes = db.execute("SELECT SUM(incomes.total) AS total, income_categories.name, income_categories.id FROM incomes JOIN income_categories ON incomes.category_id = income_categories.id WHERE user_id = ? GROUP BY category_id",
+                          session["user_id"])
+    
+    # Calculate percentage of each category
+    sum = 0
+    for i in range(len(incomes)):
+        sum += incomes[i]["total"]
+
+    for i in range(len(incomes)):
+        incomes[i]["total"] = round(((incomes[i]["total"] / sum) * 100), 1)
+
+    for income in incomes:
+        for category in categories:
+            if income["id"] == category["id"]:
+                category["percentage"] = income["total"]
+                category["degree"] = round(((category["percentage"] / 100) * 360), 1)
+                break
+
+    fill = []
+    mask = []
+    for i in range(1, len(categories) + 1):
+        fill.append("fill-"+str(i))
+        mask.append("mask full-"+str(i))
+
+    return render_template("balance.html", balance=balance, income_number=income_number, expenses=expenses, categories=categories, mask=mask, fill=fill)
+
+
+@app.route("/history")
+@login_required
+def history():
+    """Show user's records"""
+
+    # Consult databse to find user's expenses and incomes
+    records = db.execute("SELECT expenses.date, expense_categories.name, expenses.total, expense_categories.icon FROM expenses JOIN expense_categories ON expense_categories.id = expenses.category_id WHERE user_id = ? UNION SELECT incomes.date, income_categories.name, incomes.total, income_categories.icon FROM incomes JOIN income_categories ON income_categories.id = incomes.category_id WHERE user_id = ? ORDER BY date DESC", session["user_id"], session["user_id"])
+
+    date = datetime.datetime.now()
+    date = date.strftime("%x")
+
+    return render_template("history.html", records=records, date=date)
