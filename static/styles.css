@@ -118,57 +118,49 @@
 .bars
 {
     width: 1200px;
-    flex-wrap: wrap;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;    
 }
 
 .all
 {
     display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.name-bar
-{
-    display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    margin: 12px;
+    justify-content: center;
 }
 
-.circle-wrap
+#name-category
+{
+    margin: 0;
+    font-family: 'Montserrat';
+    font-weight: 300;
+    font-size: 9;
+}
+
+.circle-wrap 
 {
     display: grid;
     grid-template-columns: repeat(1, 160px);
     grid-gap: 80px;
-    margin-top: 10px;
-    width: 145px;
-    height: 145px;
+    width: 150px;
+    height: 150px;
     background: #d9d7da;
     border-radius: 50%;
-}
-
-.circle-wrap .circle .mask
-{
-    width: 145px;
-    height: 145px;
-    position: absolute;
-    border-radius: 50%;
+    margin: 20px;
 }
 
 .circle-wrap .circle .mask 
 {
-    clip: rect(0px, 145px, 145px, 75px);
+    clip: rect(0px, 150px, 150px, 75px);
 }
 
 .circle-wrap .inside-circle 
 {
-    width: 118px;
-    height: 118px;
+    width: 124px;
+    height: 124px;
     border-radius: 50%;
     background: white;
     line-height: 120px;
@@ -178,9 +170,11 @@
     color: black;
     position: absolute;
     z-index: 100;
-    font-weight: 600;
+    font-weight: 500;
     font-size: 2em;
 }
+
+/* End progress bar */
 
 #total-balance
 {

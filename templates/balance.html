@@ -2,51 +2,57 @@
 {% extends "layout.html" %}
 
 {% block head %}
-<style>
 
-    :root
-    {
-        {% for i in range(categories|length) %}
-            --color-bar{{i + 1}}: {{ categories[i]["color"] }};
-        {% endfor %}
-    }
-
-    {% for i in range(categories|length) %}
-
-        .circle-wrap .circle .fill-{{ i + 1 }}
+    <style>
+        :root
         {
-            width: 145px;
-            height: 145px;
+            {% for i in range(categories|length) %}
+                --color-bar{{i + 1}}: {{ categories[i]["color"] }};
+                --full-{{i + 1}}: {{full[i]}};
+                --fill-{{i + 1}}: {{fill[i]}};
+            {% endfor %}
+        }
+
+        .circle-wrap .circle .mask,
+        {% for i in range((categories|length) - 1) %}
+        .circle-wrap .circle .fill-{{ i + 1 }},
+        {% endfor %}
+        .circle-wrap .circle .fill-{{ categories|length }}
+        {
+            width: 150px;
+            height: 150px;
             position: absolute;
             border-radius: 50%;
         }
 
-        .mask .fill-{{ i + 1 }} {
-            clip: rect(0px, 75px, 150px, 0px);
-            background-color: var(--color-bar{{i + 1}});
-        }
-
-        .mask.full-{{ i + 1}},
-        .circle .fill-{{ i + 1 }} 
-        {
-            animation: fill-{{ i + 1 }} ease-in-out 1.5s;
-            transform: rotate({{ 120 }}deg);
-        }
-
-        @keyframes fill-{{ i + 1 }} 
-        {
-            0% 
+        {% for i in range(categories|length) %}
+            .mask .fill-{{ i + 1 }} 
             {
-                transform: rotate(0deg);
+                clip: rect(0px, 75px, 150px, 0px);
+                background-color: var(--color-bar{{i+1}});
             }
-            100% 
-            {
-                transform: rotate({{ 120 }}deg);
-            }
-        }
 
-    {% endfor %}
-</style>
+            .mask.full-{{ i + 1 }},
+            .circle .fill-{{ i + 1 }} 
+            {
+                animation: fill-{{ i + 1 }} ease-in-out 1s;
+                transform: rotate({{ categories[i]["degree"] }}deg);
+            }
+
+            @keyframes fill-{{ i + 1 }} 
+            {
+                0% 
+                {
+                    transform: rotate(0deg);
+                }
+                100% 
+                {
+                    transform: rotate({{ categories[i]["degree"] }}deg);
+                }
+            }
+        {% endfor %}
+    </style>
+
 {% endblock %}
 
 {% block title %}
@@ -62,29 +68,30 @@
         </div>
         <p id="text-expenses">Income by category</p>
         <div class="container-bars"> 
-            <div class="bars">        
+            <div class="bars">
+                
                 {% for i in range(categories|length) %}
-                <div class="all">
-                    <div class="name-bar">
+                <div>
+                    <div class="all">
                         <span class="material-symbols-outlined" style="margin-right: 3px;">
                             {{ categories[i]["icon"] }}
                         </span>
-                        <p>
+                        <p id="name-category">
                             {{ categories[i]["name"] }}
                         </p>
                         <div class="circle-wrap">
                             <div class="circle">
-                                <!-- 1st part -->
-                                <div class={{ mask[i] }}>
-                                    <div class={{ fill[i] }}></div>
-                                </div>
-                                <!-- 2nd part -->
+                                <!-- Half part of the circle -->
                                 <div class="mask half">
-                                    <div class={{ fill[i] }}></div>
-                                </div>
+                                    <div class="fill-{{i+1}}"></div>
+                                </div>                             
+                                <!-- The other half of the circle -->
+                                <div class="mask full-{{i+1}}">
+                                    <div class="fill-{{i+1}}"></div>
+                                </div>                          
                                 <!-- Number -->
-                                <div class="inside-circle">{{categories[i]["percentage"]}}%</div>
-                            </div>
+                                <div class="inside-circle"> {{categories[i]["percentage"]}} </div>
+                            </div> 
                         </div>
                     </div>
                 </div>

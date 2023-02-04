@@ -60,16 +60,18 @@ def index():
         for category in categories:
             if expense["id"] == category["id"]:
                 category["percentage"] = expense["total"]
-                category["degree"] = round(((category["percentage"] / 100) * 360), 1)
+                category["degree"] = round(((category["percentage"] / 100) * 180), 1)
                 break
 
     fill = []
-    mask = []
+    full = []
     for i in range(1, len(categories) + 1):
         fill.append("fill-"+str(i))
-        mask.append("mask full-"+str(i))
+        full.append("full-"+str(i))
+    
+    print(categories)
 
-    return render_template("index.html", categories=categories, mask=mask, fill=fill)
+    return render_template("index.html", categories=categories, full=full, fill=fill)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -199,7 +201,7 @@ def income():
         db.execute("UPDATE users SET balance = balance + ? WHERE id = ?", amount, session["user_id"])
         db.execute("UPDATE users SET total_income = total_income + ? WHERE id = ?", amount, session["user_id"])
 
-        return redirect("/")
+        return redirect("/balance")
 
 
 @app.route("/balance")
@@ -240,16 +242,16 @@ def balance():
         for category in categories:
             if income["id"] == category["id"]:
                 category["percentage"] = income["total"]
-                category["degree"] = round(((category["percentage"] / 100) * 360), 1)
+                category["degree"] = round(((category["percentage"] / 100) * 180), 1)
                 break
 
     fill = []
-    mask = []
+    full = []
     for i in range(1, len(categories) + 1):
         fill.append("fill-"+str(i))
-        mask.append("mask full-"+str(i))
+        full.append("full-"+str(i))
 
-    return render_template("balance.html", balance=balance, income_number=income_number, expenses=expenses, categories=categories, mask=mask, fill=fill)
+    return render_template("balance.html", balance=balance, income_number=income_number, expenses=expenses, categories=categories, fill=fill, full=full)
 
 
 @app.route("/history")
@@ -257,7 +259,7 @@ def balance():
 def history():
     """Show user's records"""
 
-    # Consult databse to find user's expenses and incomes
+    # Consult database to find user's expenses and incomes
     records = db.execute("SELECT expenses.date, expense_categories.name, expenses.total, expense_categories.icon FROM expenses JOIN expense_categories ON expense_categories.id = expenses.category_id WHERE user_id = ? UNION SELECT incomes.date, income_categories.name, incomes.total, income_categories.icon FROM incomes JOIN income_categories ON income_categories.id = incomes.category_id WHERE user_id = ? ORDER BY date DESC", session["user_id"], session["user_id"])
 
     date = datetime.datetime.now()
