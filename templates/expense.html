@@ -1,35 +1,47 @@
-{% extends "layout.html" %}
+{% extends "login-layout.html" %}
 
 {% block title %}
     Add Expense
 {% endblock %}
 
+{% block head %}
+    {% endblock %}
+
 {% block main %}
-    <main class="container-fluid py-5 text-center">
-        <form action="/expense" class="expense-form" method="post">
-            <div class="amount">
-                Amount
-                <input type="text" placeholder="$" name="amount" required autocomplete="off">
+    <div class="login-card-header">
+        <h1>Add Expense</h1>
+    </div>
+    <form class="login-card-form" action="/expense" method="post">
+        <div class="form-item">
+            <span class="form-item-icon material-symbols-rounded">attach_money</span>
+            <input type="text" name="amount" placeholder="Enter Amount" required autofocus autocomplete="off">
+        </div>
+        <div class="form-item" id="categories-dropdown">
+            <div class="select-menu">
+                <div class="select-btn">
+                    <span class="sBtn-text">Select a Category</span>
+                    <i class="bx bx-chevron-down"></i>
+                </div>        
+                <ul class="options">
+                    {% for i in range(categories|length) %}
+                    <li class="option">
+                        <span class="material-symbols-outlined">{{categories[i]["icon"]}}</span>
+                        <span class="option-text">{{categories[i]["name"]}}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
             </div>
-            <p class="categories">Select a category</p>
-            <div class="categories">
-                {% for i in range(categories|length) %}
-                    <div class="text-categories">
-                        <input class="form-check-input" type="radio" name="category" id={{categories[i]["name"]}} value={{categories[i]["id"]}} required>
-                        <label class="form-check-label item-center" for={{categories[i]["name"]}}>
-                        <span class="material-symbols-outlined" style="margin-right: 3px;">
-                            {{ categories[i]["icon"] }}
-                        </span>
-                        {{ categories[i]["name"] }}
-                        </label>
-                    </div>
-                {% endfor %}
-            </div>
-            <div class="date">
-                Date: 
-                <input type="date" name="date" required>
-            </div>
-            <button type="submit" id="bt-exp">Add Expense</button>
-        </form>
-    </main>
+        </div>      
+        <div class="form-item">
+            <input type="date" name="date">
+        </div>        
+        <div id="input-category-container">
+            <input type="text" value="" name="category" id="input-category">
+        </div>  
+        <button type="submit" id="bt-exp">Add Expense</button>
+    </form>
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+    <script src="/static/sendCategory.js"></script>
+    <script src="/static/dropdown.js"></script>
 {% endblock %}

@@ -5,31 +5,35 @@
 {% endblock %}
 
 {% block main %}
-    <main class="container-fluid py-5 text-center">
-        <form action="/income" class="expense-form" method="post">
-            <div class="amount">
-                Amount
-                <input type="text" placeholder="$" name="amount" required autocomplete="off">
-            </div>
-            <p class="categories">Select a category</p>
-            <div class="categories">
-                {% for i in range(categories|length) %}
-                    <div class="text-categories">
-                        <input class="form-check-input" type="radio" name="category" id={{categories[i]["name"]}} value={{categories[i]["id"]}} required>
-                        <label class="form-check-label item-center" for={{categories[i]["name"]}}>
-                        <span class="material-symbols-outlined" style="margin-right: 3px;">
-                            {{ categories[i]["icon"] }}
-                        </span>
-                        {{ categories[i]["name"] }}
-                        </label>
+    <main class="main-index">
+        <div class="container-main">
+            <form action="/income" class="expense-form" method="post">
+                <div class="form-container">
+                    <div class="amount">
+                        Amount
+                        <input type="text" placeholder="$" name="amount" required autocomplete="off">
                     </div>
-                {% endfor %}
-            </div>
-            <div class="date">
-                Date: 
-                <input type="date" name="date" required>
-            </div>
-            <button type="submit" id="bt-inc">Add Income</button>
-        </form>
+                    <p class="categories">Select a category</p>
+                    <div class="categories">
+                        {% for i in range(categories|length) %}
+                            <div class="text-categories">
+                                <input class="form-check-input" type="radio" name="category" id={{categories[i]["name"]}} value={{categories[i]["id"]}} required>
+                                <label class="form-check-label item-center" for={{categories[i]["name"]}}>
+                                <span class="material-symbols-outlined" style="margin-right: 3px;">
+                                    {{ categories[i]["icon"] }}
+                                </span>
+                                {{ categories[i]["name"] }}
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="date">
+                        Date: 
+                        <input type="date" name="date" required>
+                    </div>
+                    <button type="submit" id="bt-inc">Add Income</button>
+                </div>
+            </form>
+        </div>
     </main>
 {% endblock %}

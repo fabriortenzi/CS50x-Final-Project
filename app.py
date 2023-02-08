@@ -1,11 +1,12 @@
 import os
 
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, render_template, request, session, jsonify
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 import datetime
+import json
 
 from helpers import login_required, usd
 
@@ -22,6 +23,11 @@ Session(app)
 
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///budget.db")
+
+
+# Key function to sort categories by percentage
+def get_percentage(record):
+    return record.get('percentage')
 
 
 @app.after_request
@@ -63,15 +69,9 @@ def index():
                 category["degree"] = round(((category["percentage"] / 100) * 180), 1)
                 break
 
-    fill = []
-    full = []
-    for i in range(1, len(categories) + 1):
-        fill.append("fill-"+str(i))
-        full.append("full-"+str(i))
-    
-    print(categories)
+    categories.sort(key=get_percentage, reverse=True)
 
-    return render_template("index.html", categories=categories, full=full, fill=fill)
+    return render_template("index.html", categories=categories)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -141,7 +141,7 @@ def signup():
                    username, generate_password_hash(password, method='pbkdf2:sha256', salt_length=8))
                 
         return redirect("/")
-
+    
 
 @app.route("/expense", methods=["GET", "POST"])
 @login_required
@@ -159,19 +159,11 @@ def expense():
     # POST
     else:
         amount = request.form.get("amount")
-        amount = -(int(amount))
-        category_id = request.form.get("category")
-        date = request.form.get("date")
+        category = request.form.get("category")    
 
-        # Record the expense
-        db.execute("INSERT INTO expenses (date, total, user_id, category_id) VALUES(?, ?, ?, ?)",
-                   date, amount, session["user_id"], category_id)
-        
-        # Update user's cash
-        db.execute("UPDATE users SET balance = balance + ? WHERE id = ?", amount, session["user_id"])
-        db.execute("UPDATE users SET total_expenses = total_expenses + ? WHERE id = ?", amount, session["user_id"])
+        print(amount, category)
 
-        return redirect("/")
+        return redirect("/")    
 
 
 @app.route("/income", methods=["GET", "POST"])
@@ -245,13 +237,9 @@ def balance():
                 category["degree"] = round(((category["percentage"] / 100) * 180), 1)
                 break
 
-    fill = []
-    full = []
-    for i in range(1, len(categories) + 1):
-        fill.append("fill-"+str(i))
-        full.append("full-"+str(i))
+    categories.sort(key=get_percentage, reverse=True)
 
-    return render_template("balance.html", balance=balance, income_number=income_number, expenses=expenses, categories=categories, fill=fill, full=full)
+    return render_template("balance.html", balance=balance, income_number=income_number, expenses=expenses, categories=categories)
 
 
 @app.route("/history")
@@ -266,3 +254,17 @@ def history():
     date = date.strftime("%x")
 
     return render_template("history.html", records=records, date=date)
+
+
+@app.route("/category", methods=["GET", "POST"])
+@login_required
+def category():
+    """Add custom category"""
+
+    # GET
+    if request.method == "GET":
+
+        return render_template("category.html")
+    
+    # POST
+    #else:

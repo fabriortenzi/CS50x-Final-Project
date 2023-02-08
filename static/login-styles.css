@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Poppins:wght@500&display=swap');
 
+
 body
 {
     font-family: 'Montserrat', sans-serif;
@@ -120,7 +121,8 @@ body
 }
 
 .login-card input[type="text"],
-.login-card input[type="password"]
+.login-card input[type="password"],
+.login-card input[type="date"]
 {
     border: none;
     outline: none;
@@ -135,6 +137,17 @@ body
 .login-card input:focus
 {
     background: white;
+}
+
+.input-category-focus
+{
+    background: white;
+    border: none;
+    outline: none;
+    border-radius: 100px;
+    width: 100%;
+    transition: background .5s;
+    opacity: 1;
 }
 
 .login-card input[type="checkbox"]
@@ -160,3 +173,107 @@ body
     background-color: rgba(0, 0, 0, .85);
     cursor: pointer;
 }
+
+#bt-exp
+{
+    background: rgb(240, 0, 0);
+    border: none;
+    outline: none;
+}
+
+#bt-inc
+{
+    background: rgba(0, 194, 18, 1);
+}
+
+#bt-exp:hover
+{
+    background-color: rgba(240, 0, 0, 0.8);
+}
+
+#bt-inc:hover
+{
+    background-color: rgba(0, 194, 18, 0.82);
+}
+
+/* Dropdown */
+
+.select-menu
+{
+    width: auto;
+    margin: 0;
+    height: 47px;
+}
+.select-menu .select-btn{
+    font-size: 15px;
+    opacity: .4;
+    display: flex;
+    height: 47px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 50px;
+    align-items: center;
+    cursor: pointer;
+    justify-content: space-between;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+.select-btn i{
+    font-size: 25px;
+    transition: 0.3s;
+}
+.select-menu.active .select-btn i{
+    transform: rotate(-180deg);
+}
+
+#input-category-container
+{
+    width: 0;
+    height: 0;
+}
+
+#input-category
+{
+    visibility: hidden;
+}
+
+.options
+{   
+    width: 300px; 
+    height: 200px; 
+    overflow: auto;
+}
+
+.select-menu .options{
+    position: relative;
+    padding: 20px;
+    margin-top: 10px;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 0 3px rgba(0,0,0,0.1);
+    display: none;
+}
+.select-menu.active .options{
+    display: block;
+}
+.options .option{
+    display: flex;
+    height: 55px;
+    cursor: pointer;
+    padding: 0 16px;
+    border-radius: 8px;
+    align-items: center;
+    background: #fff;
+}
+.options .option:hover{
+    background: #F2F2F2;
+}
+.option i{
+    font-size: 25px;
+    margin-right: 12px;
+}
+.option .option-text{
+    font-size: 18px;
+    color: #333;
+}
+
+/* End dropdown */

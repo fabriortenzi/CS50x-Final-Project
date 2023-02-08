@@ -25,7 +25,7 @@
 </head>
 <body>
     <header>
-      <nav class="navbar navbar-expand-lg" style="background-color: #712cf9;">
+      <nav class="navbar navbar-expand-lg" style="background: linear-gradient(to right, #712cf9, #9220f6);">
         <div class="container-fluid">
           <div class="logo">
             <img src="/static/wallet.svg" alt="logo">
@@ -41,6 +41,9 @@
               </li>
               <li class="nav-item">
                 <a class="nav-link active" href={{url_for('income')}}>Add Income</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href={{url_for('category')}}>Add Category</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" aria-current="page" href={{url_for('balance')}}>Balance</a>
@@ -65,4 +68,5 @@
         {% endblock %}
 
 </body>
+
 </html>

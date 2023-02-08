@@ -8,8 +8,6 @@
         {
             {% for i in range(categories|length) %}
                 --color-bar{{i + 1}}: {{ categories[i]["color"] }};
-                --full-{{i + 1}}: {{full[i]}};
-                --fill-{{i + 1}}: {{fill[i]}};
             {% endfor %}
         }
 
@@ -61,7 +59,7 @@
 
 {% block main %}
     <main>
-        <p id="balance-number">Your Balance: {{ balance|usd }}</p>
+        <p id="balance-number" class="amount">Your Balance: {{ balance|usd }}</p>
         <div class="total-income-expenses-container">
             <p>Total Income: {{ income_number|usd }}</p>
             <p>Total Expenses: {{ expenses|usd }}</p>
@@ -90,7 +88,7 @@
                                     <div class="fill-{{i+1}}"></div>
                                 </div>                          
                                 <!-- Number -->
-                                <div class="inside-circle"> {{categories[i]["percentage"]}} </div>
+                                <div class="inside-circle"> {{categories[i]["percentage"]}}% </div>
                             </div> 
                         </div>
                     </div>

@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Poppins:wght@300;500&display=swap');
 
+body
+{
+    background: linear-gradient(to right, #712cf9, #9220f6);
+    margin: 0;
+}
+
+
 
 .logo
 {
@@ -19,9 +26,9 @@
 
 .amount 
 {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 500;
-    font-size: 40px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2rem;
+    font-weight: 600;
 }
 
 .amount input
@@ -42,9 +49,19 @@
     margin-top: 50px;
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
+    align-items: space-between;
     justify-content: center;
     gap: 10px 20px;
+    width: 1000px;
+}
+
+.form-container
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 50px;
 }
 
 .text-categories
@@ -76,26 +93,6 @@
     letter-spacing: 2px;
     transition: background .5s;
     width: 200px;
-}
-
-#bt-exp
-{
-    background: rgba(255, 2, 9, 1);
-}
-
-#bt-inc
-{
-    background: rgba(0, 194, 18, 1);
-}
-
-#bt-exp:hover
-{
-    background-color: rgba(255, 2, 9, 0.82);
-}
-
-#bt-inc:hover
-{
-    background-color: rgba(0, 194, 18, 0.82);
 }
 
 .date
@@ -136,7 +133,7 @@
 {
     margin: 0;
     font-family: 'Montserrat';
-    font-weight: 300;
+    font-weight: 500;
     font-size: 9;
 }
 
@@ -147,7 +144,7 @@
     grid-gap: 80px;
     width: 150px;
     height: 150px;
-    background: #d9d7da;
+    background: #c9c9c9;
     border-radius: 50%;
     margin: 20px;
 }
@@ -162,7 +159,7 @@
     width: 124px;
     height: 124px;
     border-radius: 50%;
-    background: white;
+    background: linear-gradient(to right, #712cf9, #9220f6);;
     line-height: 120px;
     text-align: center;
     margin-top: 13px;
@@ -172,6 +169,14 @@
     z-index: 100;
     font-weight: 500;
     font-size: 2em;
+}
+
+.inside-circle-transp
+{
+    background: rgba(255, 255, 255, .5);
+    width: 124px;
+    height: 124px;
+    border-radius: 50%;
 }
 
 /* End progress bar */
@@ -186,10 +191,10 @@
 #text-expenses
 {
     font-family: 'Montserrat', sans-serif;
-    font-weight: 400;
-    font-size: 20px;
     text-align: center;
     padding-top: 18px;
+    font-size: 2rem;
+    font-weight: 600;
 
 }
 
@@ -203,7 +208,11 @@
 
 .table-container
 {
-    margin: 60px;
+    padding-top: 30px;
+    padding-left: 60px;
+    padding-right: 60px;
+    margin: 0;
+    height: 100vh;
 }
 
 .table-center-text
@@ -221,9 +230,6 @@
 #balance-number
 {
     margin-top: 20px;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 500;
-    font-size: 30px;
     text-align: center;
 }
 
@@ -234,4 +240,60 @@
     font-family: 'Montserrat', sans-serif;
     font-weight: 400;
     font-size: 17px;
+}
+
+.type-categories
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.type
+{
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+    font-size: 20px;
+    margin-right: 30px;
+    margin-top: 0;
+    margin-left: 0;
+    margin-bottom: 0;
+}
+
+.value-checkbox-type
+{
+    margin-left: 5px;
+    margin-right: 10px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+}
+
+.main-index
+{
+    background: linear-gradient(to right, #712cf9, #9220f6);
+    height: 100vh;
+}
+
+.container-main
+{
+    background: rgba(255, 255, 255, .5);
+    height: 100vh;
+}
+
+.input-amount-expense
+{
+    border: none;
+    outline: none;
+    background: rgba(255, 255, 255, .3);
+    padding: 1rem 1.5rem;
+    padding-left: calc(1.5rem * 2.5);
+    border-radius: 100px;
+    width: 100%;
+    transition: background .5s;
+}
+
+.input-amount-expense:focus
+{
+    background: white;
 }
