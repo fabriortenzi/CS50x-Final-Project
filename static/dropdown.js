@@ -1,3 +1,4 @@
+// Dropdown
 const optionMenu = document.querySelector(".select-menu"),
        selectBtn = optionMenu.querySelector(".select-btn"),
        options = optionMenu.querySelectorAll(".option"),
@@ -24,12 +25,23 @@ inputCategory.addEventListener('click', function() {
     // Change the class of the dropdown to make the focus effect
     inputCategory.className = "input-category-focus";
 });
-let notDropdown = document.querySelectorAll('*:not(#categories-dropdown)');
-console.log(notDropdown);
-for (element in notDropdown)
-{
+
+
+// Change active dropdown to normal
+let fields = new Array();
+let field1 = document.getElementById('1');
+fields[0] = field1;
+let field3 = document.getElementById('3');
+fields[1] = field3;
+fields.forEach(function(element){
     element.addEventListener('click', function(){    
         // Return to normal class
-        inputCategory.className = "form-item";
+        let inputCategory2 = document.querySelector("#categories-dropdown");
+        inputCategory2.className = "select-menu";
+
+        let inputCategory3 = document.getElementById('2');
+        inputCategory3.className = "select-menu";
     });
-}
+});
+
+

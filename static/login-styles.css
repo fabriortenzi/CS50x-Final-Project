@@ -177,8 +177,8 @@ body
 #bt-exp
 {
     background: rgb(240, 0, 0);
-    border: none;
-    outline: none;
+    border: rgb(240, 0, 0);
+    outline: rgb(240, 0, 0);
 }
 
 #bt-inc
@@ -274,6 +274,18 @@ body
 .option .option-text{
     font-size: 18px;
     color: #333;
+}
+
+.optionChos
+{
+    text-align: center;
+}
+
+.container-icon-text
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* End dropdown */

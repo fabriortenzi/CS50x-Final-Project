@@ -10,16 +10,20 @@
 {% block main %}
     <div class="login-card-header">
         <h1>Add Expense</h1>
+        <div>Please fill out this form</div>
     </div>
     <form class="login-card-form" action="/expense" method="post">
-        <div class="form-item">
+        <div class="form-item" id="1">
             <span class="form-item-icon material-symbols-rounded">attach_money</span>
             <input type="text" name="amount" placeholder="Enter Amount" required autofocus autocomplete="off">
         </div>
         <div class="form-item" id="categories-dropdown">
-            <div class="select-menu">
+            <div class="select-menu" id="2">                
                 <div class="select-btn">
-                    <span class="sBtn-text">Select a Category</span>
+                    <div class="container-icon-text">
+                        <span class="form-item-icon material-symbols-rounded">list</span>
+                        <span class="sBtn-text" style="margin-left: 40px;">Select a Category</span>
+                    </div>                    
                     <i class="bx bx-chevron-down"></i>
                 </div>        
                 <ul class="options">
@@ -32,7 +36,7 @@
                 </ul>
             </div>
         </div>      
-        <div class="form-item">
+        <div class="form-item" id="3">
             <input type="date" name="date">
         </div>        
         <div id="input-category-container">
