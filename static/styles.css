@@ -297,3 +297,26 @@ body
 {
     background: white;
 }
+
+/* Scrollbar */
+
+::-webkit-scrollbar 
+{
+    width: 1em;
+    background: rgba(164, 158, 158, 0.4);
+}
+  
+::-webkit-scrollbar-track 
+{
+    background: rgba(193, 193, 193, 0.2);
+    margin-block: .5em;
+}
+
+::-webkit-scrollbar-thumb 
+{
+    background: rgba(143, 143, 143, 0.7);
+    border-radius: 100vw;    
+    margin-block: 0.5em;
+}
+
+/* End scrollbar */

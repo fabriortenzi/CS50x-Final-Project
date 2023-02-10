@@ -1,3 +1,5 @@
+/* Scrollbar inspired by https://www.youtube.com/watch?v=lvKK2fs6h4I */
+
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&family=Poppins:wght@500&display=swap');
 
 
@@ -9,6 +11,7 @@ body
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: overlay;
 }
 
 .login-card
@@ -205,11 +208,10 @@ body
     height: 47px;
 }
 .select-menu .select-btn{
-    font-size: 15px;
-    opacity: .4;
+    font-size: calc(1rem * .8);
     display: flex;
-    height: 47px;
-    background: #fff;
+    height: 47px;    
+    background: rgba(255, 255, 255, .3);
     padding: 20px;
     border-radius: 50px;
     align-items: center;
@@ -240,7 +242,8 @@ body
 {   
     width: 300px; 
     height: 200px; 
-    overflow: auto;
+    overflow: overlay;
+    border-radius: 8px;
 }
 
 .select-menu .options{
@@ -257,9 +260,9 @@ body
 }
 .options .option{
     display: flex;
-    height: 55px;
+    height: 35px;
     cursor: pointer;
-    padding: 0 16px;
+    padding: 0 5px;
     border-radius: 8px;
     align-items: center;
     background: #fff;
@@ -272,20 +275,69 @@ body
     margin-right: 12px;
 }
 .option .option-text{
-    font-size: 18px;
+    font-size: calc(1rem * .9);
     color: #333;
-}
-
-.optionChos
-{
-    text-align: center;
 }
 
 .container-icon-text
 {
     display: flex;
     align-items: center;
-    justify-content: center;
 }
 
 /* End dropdown */
+
+/* Scrollbar */
+
+::-webkit-scrollbar 
+{
+    width: 1em;
+    background-color: transparent;
+}
+  
+::-webkit-scrollbar-track 
+{
+    background: transparent;
+    margin-block: .5em;
+}
+
+::-webkit-scrollbar-thumb 
+{
+    background: rgba(255, 255, 255, .3);
+    border-radius: 100vw;
+}
+
+::-webkit-scrollbar-thumb:hover 
+{
+    background: rgba(255, 255, 255, .4);
+}
+
+/* End scrollbar */
+
+/* Scrollbar dropdown */
+
+.options::-webkit-scrollbar 
+{
+    width: 1em;
+    background-color: white;
+    margin-block: 1em;
+}
+  
+.options::-webkit-scrollbar-track 
+{
+    background: transparent;
+    margin-block: 1em;
+}
+
+.options::-webkit-scrollbar-thumb 
+{
+    background: rgba(135, 135, 135, 0.3);
+    border-radius: 100vw;
+}
+
+.options::-webkit-scrollbar-thumb:hover 
+{
+    background: rgba(135, 135, 135, 0.5);
+}
+
+/* End scrollbar dropdown */

@@ -22,30 +22,31 @@
                 <div class="select-btn">
                     <div class="container-icon-text">
                         <span class="form-item-icon material-symbols-rounded">list</span>
-                        <span class="sBtn-text" style="margin-left: 40px;">Select a Category</span>
+                        <p class="inner-text-dropdown" id="4">Select a Category</p>
                     </div>                    
                     <i class="bx bx-chevron-down"></i>
                 </div>        
                 <ul class="options">
                     {% for i in range(categories|length) %}
                     <li class="option">
-                        <span class="material-symbols-outlined">{{categories[i]["icon"]}}</span>
+                        <span class="material-symbols-outlined" style="margin-right: 5px;">{{categories[i]["icon"]}}</span>
                         <span class="option-text">{{categories[i]["name"]}}</span>
                     </li>
                     {% endfor %}
                 </ul>
             </div>
         </div>      
-        <div class="form-item" id="3">
+        <!--<div class="form-item" id="3">
             <input type="date" name="date">
         </div>        
         <div id="input-category-container">
             <input type="text" value="" name="category" id="input-category">
-        </div>  
+        </div> --> 
         <button type="submit" id="bt-exp">Add Expense</button>
     </form>
 
+    <!-- JavaScript -->
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
-    <script src="/static/sendCategory.js"></script>
     <script src="/static/dropdown.js"></script>
+    
 {% endblock %}
