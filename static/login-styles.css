@@ -12,6 +12,7 @@ body
     align-items: center;
     justify-content: center;
     overflow: overlay;
+    user-select: none;
 }
 
 .login-card
@@ -125,16 +126,58 @@ body
 
 .login-card input[type="text"],
 .login-card input[type="password"],
-.login-card input[type="date"]
+.login-card input[type="date"],
+.login-card input[type="color"]
 {
     border: none;
     outline: none;
     background: rgba(255, 255, 255, .3);
+    font-family: 'Montserrat', sans-serif;
     padding: 1rem 1.5rem;
     padding-left: calc(1.5rem * 2.5);
     border-radius: 100px;
     width: 100%;
+    height: 47px;
     transition: background .5s;
+}
+
+#text-color
+{
+    font-size: calc(1rem * .8);
+    opacity: .8;
+    text-align: center;
+    margin-top: 0;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+	padding: 0;
+    height: 15px;
+    width: auto;
+}
+
+input[type="color"]::-webkit-color-swatch {
+	border: none;    
+    border-radius: 10px;
+}
+
+.opt-1-container,
+.opt-2-container
+{
+    display: flex;
+    align-items: center;
+}
+
+.options-container
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+}
+
+::-webkit-calendar-picker-indicator
+{
+    width: 120px;   
 }
 
 .login-card input:focus
@@ -153,11 +196,21 @@ body
     opacity: 1;
 }
 
-.login-card input[type="checkbox"]
+.login-card input[type="radio"]
 {
     width: 16px;
     height: 16px;
     accent-color: black;
+    margin-top: 0;
+    margin-left: 0;
+    margin-bottom: 0;
+    margin-right: 5px;
+}
+
+.text-radio
+{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
 }
 
 .login-card-form button
@@ -186,7 +239,9 @@ body
 
 #bt-inc
 {
-    background: rgba(0, 194, 18, 1);
+    background: rgb(40, 200, 15);
+    border: rgb(40, 200, 15);
+    outline: rgb(40, 200, 15);
 }
 
 #bt-exp:hover
@@ -196,7 +251,7 @@ body
 
 #bt-inc:hover
 {
-    background-color: rgba(0, 194, 18, 0.82);
+    background-color: rgba(40, 200, 15, 0.8);
 }
 
 /* Dropdown */
@@ -206,6 +261,7 @@ body
     width: auto;
     margin: 0;
     height: 47px;
+    z-index: 12;
 }
 .select-menu .select-btn{
     font-size: calc(1rem * .8);
@@ -244,11 +300,12 @@ body
     height: 200px; 
     overflow: overlay;
     border-radius: 8px;
+    z-index: 12;
 }
 
 .select-menu .options{
     position: relative;
-    padding: 20px;
+    padding: 15px;
     margin-top: 10px;
     border-radius: 8px;
     background: #fff;

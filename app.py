@@ -1,12 +1,12 @@
 import os
 
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session, jsonify
+from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
+from string import capwords
 import datetime
-import json
 
 from helpers import login_required, usd
 
@@ -154,7 +154,9 @@ def expense():
         # Get the expense categories
         categories = db.execute("SELECT * FROM expense_categories ORDER BY name")
 
-        return render_template("expense.html", categories=categories)
+        date = datetime.date.today()
+
+        return render_template("expense.html", categories=categories, date=date)
 
     # POST
     else:
@@ -250,8 +252,7 @@ def history():
     # Consult database to find user's expenses and incomes
     records = db.execute("SELECT expenses.date, expense_categories.name, expenses.total, expense_categories.icon FROM expenses JOIN expense_categories ON expense_categories.id = expenses.category_id WHERE user_id = ? UNION SELECT incomes.date, income_categories.name, incomes.total, income_categories.icon FROM incomes JOIN income_categories ON income_categories.id = incomes.category_id WHERE user_id = ? ORDER BY date DESC", session["user_id"], session["user_id"])
 
-    date = datetime.datetime.now()
-    date = date.strftime("%x")
+    date = datetime.date.today()
 
     return render_template("history.html", records=records, date=date)
 
@@ -263,8 +264,28 @@ def category():
 
     # GET
     if request.method == "GET":
-
         return render_template("category.html")
     
     # POST
-    #else:
+    else:
+        name = request.form.get("name")
+        color = request.form.get("color")
+        type_cat = request.form.get("type")
+
+        #if not name or not color or not type_cat:
+            #return render_template("error.html", message="Some inputs were left blank")
+        
+        name = capwords(name)
+
+        # Record Category
+        if type_cat == "expense":
+            db.execute("INSERT INTO expense_categories (name, icon, color, user_id) VALUES(?, ?, ?, ?)", 
+                       name, "add", color, session["user_id"])     
+        elif type_cat == "income":
+            db.execute("INSERT INTO income_categories (name, icon, color, user_id) VALUES(?, ?, ?, ?)", 
+                       name, "add", color, session["user_id"]) 
+        #else:
+            #return render_template("error.html", message="Incorrect Type")        
+
+        return redirect("/")
+    

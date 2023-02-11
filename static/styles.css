@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Poppins:wght@300;500&display=swap');
 
+
 body
 {
     background: linear-gradient(to right, #712cf9, #9220f6);
     margin: 0;
+    user-select: none;
 }
-
-
 
 .logo
 {

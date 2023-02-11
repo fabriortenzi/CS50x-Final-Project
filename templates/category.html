@@ -1,32 +1,41 @@
-{% extends "layout.html" %}
+{% extends "login-layout.html" %}
 
 {% block title %}
     Add Category
 {% endblock %}
 
 {% block main %}
-
-    <main class="container-fluid py-5 text-center">
-        <p class="amount">Add a New Category</p>
-        <form action="/category" method="post">
-            <div class="type-categories">
-                <p class="type">Select a Type</p>
-
-                <input type="radio" class="form-check-input" name="type" id="1" value="expense" required>
-                <label for="1" class="value-checkbox-type form-check-label item-center">Expense</label>
-
-                <input type="radio" class="form-check-input form-check-label item-center" name="type" id="2" value="income" required>
-                <label for="2" class="value-checkbox-type">Income</label>
+    
+    <div class="login-card-header">
+        <h1>Add Category</h1>
+        <div>Please fill out this form</div>
+    </div>
+    <form class="login-card-form" action="/category" method="post">
+        <div class="form-item">
+            <span class="form-item-icon material-symbols-rounded">edit</span>
+            <input type="text" name="name" placeholder="Enter Name" required autofocus autocomplete="off">
+        </div>  
+        <div class="color-container">
+            <p id="text-color">Pick a Color</p>
+            <div class="form-item">
+                <span class="form-item-icon material-symbols-rounded">palette</span>
+                <input type="color" name="color" value="#9220f6" placeholder="Pick a Color" id="input-color">
             </div>
-            <div>
-                <p class="categories">Choose a Name</p>
-                <input type="text">
+        </div>
+        <div class="type-category-container">
+            <p id="text-color">Select a Type</p>
+            <div class="options-container">
+                <div class="opt-1-container">
+                    <input type="radio" name="type" id="opt-1" value="expense" required>
+                    <label for="opt-1" class="text-radio">Expense</label>
+                </div>                      
+                <div class="opt-2-container">
+                    <input type="radio" name="type" id="opt-2" value="income" required>
+                    <label for="opt-2" class="text-radio">Income</label>
+                </div>              
             </div>
-            <div>
-                <p class="categories">Pick a Color</p>
-                <input type="color">
-            </div>
-        </form>
-    </main>
+        </div>        
+        <button type="submit">Add Category</button>
+    </form>
 
 {% endblock %}

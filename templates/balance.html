@@ -58,43 +58,48 @@
 {% endblock %}
 
 {% block main %}
-    <main>
-        <p id="balance-number" class="amount">Your Balance: {{ balance|usd }}</p>
+    <main class="main-index">
+        <!--<p id="balance-number" class="amount">Your Balance: {{ balance|usd }}</p>
         <div class="total-income-expenses-container">
             <p>Total Income: {{ income_number|usd }}</p>
             <p>Total Expenses: {{ expenses|usd }}</p>
-        </div>
-        <p id="text-expenses">Income by category</p>
-        <div class="container-bars"> 
-            <div class="bars">
-                
-                {% for i in range(categories|length) %}
-                <div>
-                    <div class="all">
-                        <span class="material-symbols-outlined" style="margin-right: 3px;">
-                            {{ categories[i]["icon"] }}
-                        </span>
-                        <p id="name-category">
-                            {{ categories[i]["name"] }}
-                        </p>
-                        <div class="circle-wrap">
-                            <div class="circle">
-                                <!-- Half part of the circle -->
-                                <div class="mask half">
-                                    <div class="fill-{{i+1}}"></div>
-                                </div>                             
-                                <!-- The other half of the circle -->
-                                <div class="mask full-{{i+1}}">
-                                    <div class="fill-{{i+1}}"></div>
-                                </div>                          
-                                <!-- Number -->
-                                <div class="inside-circle"> {{categories[i]["percentage"]}}% </div>
-                            </div> 
+        </div>-->
+        <div class="container-main">
+            <p id="text-expenses">Income by category</p>
+            <div class="container-bars"> 
+                <div class="bars">
+                    
+                    {% for i in range(categories|length) %}
+                    <div>
+                        <div class="all">
+                            <span class="material-symbols-outlined" style="margin-right: 3px;">
+                                {{ categories[i]["icon"] }}
+                            </span>
+                            <p id="name-category">
+                                {{ categories[i]["name"] }}
+                            </p>
+                            <div class="circle-wrap">
+                                <div class="circle">
+                                    <!-- Half part of the circle -->
+                                    <div class="mask half">
+                                        <div class="fill-{{i+1}}"></div>
+                                    </div>                             
+                                    <!-- The other half of the circle -->
+                                    <div class="mask full-{{i+1}}">
+                                        <div class="fill-{{i+1}}"></div>
+                                    </div>                          
+                                    <!-- Number -->
+                                    <div class="inside-circle">
+                                        <div class="inside-circle-transp"> {{categories[i]["percentage"]}}% </div>
+                                    </div>
+                                </div> 
+                            </div>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
             </div>
-        </div>   
+        </div>
+           
     </main>
 {% endblock %}

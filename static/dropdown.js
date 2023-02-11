@@ -46,3 +46,12 @@ fields.forEach(function(element){
 });
 
 
+// Date
+let date = document.getElementById('3');
+date.addEventListener('click', function(){
+    document.getElementById('1').focus();
+    
+    console.log('hola');
+});
+
+
