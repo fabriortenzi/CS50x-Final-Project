@@ -1,99 +1,26 @@
-<!-- Circular progress bars inspired by https://www.youtube.com/watch?v=8a9f8hG6M5A&t=13s -->
-
 {% extends "layout.html" %}
-
-{% block head %}
-
-    <style>
-        :root
-        {
-            {% for i in range(categories|length) %}
-                --color-bar{{i + 1}}: {{ categories[i]["color"] }};
-            {% endfor %}
-        }
-
-        .circle-wrap .circle .mask,
-        {% for i in range((categories|length) - 1) %}
-        .circle-wrap .circle .fill-{{ i + 1 }},
-        {% endfor %}
-        .circle-wrap .circle .fill-{{ categories|length }}
-        {
-            width: 150px;
-            height: 150px;
-            position: absolute;
-            border-radius: 50%;
-        }
-
-        {% for i in range(categories|length) %}
-            .mask .fill-{{ i + 1 }} 
-            {
-                clip: rect(0px, 75px, 150px, 0px);
-                background-color: var(--color-bar{{i+1}});
-            }
-
-            .mask.full-{{ i + 1 }},
-            .circle .fill-{{ i + 1 }} 
-            {
-                animation: fill-{{ i + 1 }} ease-in-out 1s;
-                transform: rotate({{ categories[i]["degree"] }}deg);
-            }
-
-            @keyframes fill-{{ i + 1 }} 
-            {
-                0% 
-                {
-                    transform: rotate(0deg);
-                }
-                100% 
-                {
-                    transform: rotate({{ categories[i]["degree"] }}deg);
-                }
-            }
-        {% endfor %}
-    </style>
-
-{% endblock %}
 
 {% block title %}
     Main
 {% endblock %}
 
 {% block main %}
+
     <main class="main-index">
         <div class="container-main">
-            <p id="text-expenses">Expenses by category</p>
-            <div class="container-bars"> 
-                <div class="bars">
-                    {% for i in range(categories|length) %}
-                    <div>
-                        <div class="all">
-                            <span class="material-symbols-outlined" style="margin-right: 3px;">
-                                {{ categories[i]["icon"] }}
-                            </span>
-                            <p id="name-category">
-                                {{ categories[i]["name"] }}
-                            </p>
-                            <div class="circle-wrap">
-                                <div class="circle">
-                                    <!-- Half part of the circle -->
-                                    <div class="mask half">
-                                        <div class="fill-{{i+1}}"></div>
-                                    </div>                             
-                                    <!-- The other half of the circle -->
-                                    <div class="mask full-{{i+1}}">
-                                        <div class="fill-{{i+1}}"></div>
-                                    </div>                          
-                                    <!-- Number -->
-                                    <div class="inside-circle">
-                                        <div class="inside-circle-transp"> {{categories[i]["percentage"]}}% </div>
-                                    </div>
-                                </div> 
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
+            <h1 class="title">Welcome, {{record[0]["username"]}}!</h1>
+            <h1 class="title">Your Balance is {{record[0]["balance"]|usd}}</h1>
+            <div class="container-exp-inc">
+                <h5 class="total-categories">Total Expenses: {{record[0]["total_expenses"]|usd}}</p>
+                <h5 class="total-categories">Total Income: {{record[0]["total_income"]|usd}}</p>
+            </div>
+            <form action="/" method="post">
+                <div class="container-exp-inc">
+                    <button name="type" type="sumbit" value="expenses">Show Expenses</button>
+                    <button name="type" type="sumbit" value="income">Show Income</button>
                 </div>
-            </div>   
+            </form>
         </div>
-    </main> 
+    </main>
+
 {% endblock %}

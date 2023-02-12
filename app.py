@@ -39,41 +39,6 @@ def after_request(response):
     return response
 
 
-@app.route("/")
-@login_required
-def index():
-    
-    # Consult database for expense categories
-    categories = db.execute("SELECT * FROM expense_categories")
-
-    for category in categories:
-        category["percentage"] = 0
-        category["degree"] = 0
-
-    # Consult database for user's expenses
-    expenses = db.execute("SELECT SUM(expenses.total) AS total, expense_categories.name, expense_categories.id FROM expenses JOIN expense_categories ON expenses.category_id = expense_categories.id WHERE user_id = ? GROUP BY category_id",
-                          session["user_id"])
-    
-    # Calculate percentage of each category
-    sum = 0
-    for i in range(len(expenses)):
-        sum += expenses[i]["total"]
-
-    for i in range(len(expenses)):
-        expenses[i]["total"] = round(((expenses[i]["total"] / sum) * 100), 1)
-
-    for expense in expenses:
-        for category in categories:
-            if expense["id"] == category["id"]:
-                category["percentage"] = expense["total"]
-                category["degree"] = round(((category["percentage"] / 100) * 180), 1)
-                break
-
-    categories.sort(key=get_percentage, reverse=True)
-
-    return render_template("index.html", categories=categories)
-
-
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Log user in"""
@@ -104,17 +69,6 @@ def login():
         return redirect("/")
 
 
-@app.route("/logout")
-def logout():
-    """Log user out"""
-
-    # Forget any user_id
-    session.clear()
-
-    # Redirect user to login form
-    return redirect("/")
-
-
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     """Create account"""
@@ -143,7 +97,83 @@ def signup():
         return redirect("/")
     
 
-@app.route("/expense", methods=["GET", "POST"])
+@app.route("/logout")
+def logout():
+    """Log user out"""
+
+    # Forget any user_id
+    session.clear()
+
+    # Redirect user to login form
+    return redirect("/")
+
+
+@app.route("/", methods=["GET", "POST"])
+@login_required
+def index():
+    """Main page"""
+
+    # GET
+    if request.method == "GET":
+
+        # Get user's info
+        record = db.execute("SELECT username, balance, total_expenses, total_income FROM users WHERE id = ?", session["user_id"])
+        
+        return render_template("index.html", record=record)
+
+    # POST
+    else:
+
+        type_button = request.form.get("type")
+
+        if type_button == "expense":
+            return redirect("/show-expenses")
+        elif type_button == "income":
+            return redirect("/show-income")
+        else:
+            # Complete with error
+            return redirect("/show-expenses")
+
+
+@app.route("/show-expenses")
+@login_required
+def showExpenses():
+    
+    # Consult database for expense categories
+    categories = db.execute("SELECT * FROM expense_categories WHERE user_id IS NULL OR user_id = ? ORDER BY name",
+                            session["user_id"])
+
+    for category in categories:
+        category["percentage"] = 0
+        category["degree"] = 0
+
+    # Consult database for user's expenses
+    expenses = db.execute("SELECT SUM(expenses.total) AS total, expense_categories.name, expense_categories.id FROM expenses JOIN expense_categories ON expenses.category_id = expense_categories.id WHERE expenses.user_id = ? GROUP BY category_id",
+                          session["user_id"])
+
+    print(expenses)
+    
+    # Calculate percentage of each category
+    sum = 0
+    for i in range(len(expenses)):
+        sum += expenses[i]["total"]
+
+    for i in range(len(expenses)):
+        expenses[i]["total"] = round(((expenses[i]["total"] / sum) * 100), 1)
+
+    for expense in expenses:
+        for category in categories:
+            if expense["id"] == category["id"]:
+                category["percentage"] = expense["total"]
+                category["degree"] = round(((category["percentage"] / 100) * 180), 1)
+                break
+
+    categories.sort(key=get_percentage, reverse=True)
+
+    return render_template("show-expenses.html", categories=categories)
+
+
+@app.route("/add-expense", methods=["GET", "POST"])
 @login_required
 def expense():
     """Add an Expense"""
@@ -152,66 +182,43 @@ def expense():
     if request.method == "GET":
 
         # Get the expense categories
-        categories = db.execute("SELECT * FROM expense_categories ORDER BY name")
+        categories = db.execute("SELECT * FROM expense_categories WHERE user_id IS NULL OR user_id = ? ORDER BY name",
+                                session["user_id"])
+        
+        print(categories)
 
         date = datetime.date.today()
 
-        return render_template("expense.html", categories=categories, date=date)
+        return render_template("add-expense.html", categories=categories, date=date)
 
     # POST
     else:
         amount = request.form.get("amount")
-        category = request.form.get("category")    
+        category = request.form.get("category") 
+        date = request.form.get("date")   
 
-        print(amount, category)
-
-        return redirect("/")    
-
-
-@app.route("/income", methods=["GET", "POST"])
-@login_required
-def income():
-    """Add an Income"""
-
-    # GET
-    if request.method == "GET":
-
-        # Get the income categories
-        categories = db.execute("SELECT * FROM income_categories ORDER BY name")
-
-        return render_template("income.html", categories=categories)
-
-    # POST
-    else:
-        amount = request.form.get("amount")
-        category_id = request.form.get("category")
-        date = request.form.get("date")
-
-        # Record the income
-        db.execute("INSERT INTO incomes (date, total, user_id, category_id) VALUES(?, ?, ?, ?)",
-                   date, amount, session["user_id"], category_id)
+        #if not amount or not category or not date:
+            #return render_template("error.html", message="Some inputs were left blank")
         
-        # Update user's cash
-        db.execute("UPDATE users SET balance = balance + ? WHERE id = ?", amount, session["user_id"])
-        db.execute("UPDATE users SET total_income = total_income + ? WHERE id = ?", amount, session["user_id"])
+        amount = -int(amount)
+        
+        #category_db = db.execute("SELECT name FROM expense_categories WHERE name = ?", category)
+        #if len(category_db) != 0:
+            #return render_template("error.html", message="The Category is already added")
 
-        return redirect("/balance")
+        category_id = db.execute("SELECT id FROM expense_categories WHERE name = ?", category)
+        category_id = category_id[0]["id"]
+
+        db.execute("INSERT INTO expenses (date, total, user_id, category_id) VALUES(?, ?, ?, ?)",
+                   date, amount, session["user_id"], category_id)
+
+        return redirect("/")   
 
 
-@app.route("/balance")
+@app.route("/show-income")
 @login_required
-def balance():
-    """Show user's balance"""
-
-    # Get user's balance
-    balance = db.execute("SELECT balance FROM users WHERE id = ?", session["user_id"])
-    balance = balance[0]["balance"]
-
-    # Get user's total income and expenses
-    income_number = db.execute("SELECT total_income FROM users WHERE id = ?", session["user_id"])
-    income_number = income_number[0]["total_income"]
-    expenses = db.execute("SELECT total_expenses FROM users WHERE id = ?", session["user_id"])
-    expenses = expenses[0]["total_expenses"]
+def showIncome():
+    """Show user's income"""
 
     # Consult database for income categories
     categories = db.execute("SELECT * FROM income_categories")
@@ -221,7 +228,7 @@ def balance():
         category["degree"] = 0
 
     # Consult database for user's income
-    incomes = db.execute("SELECT SUM(incomes.total) AS total, income_categories.name, income_categories.id FROM incomes JOIN income_categories ON incomes.category_id = income_categories.id WHERE user_id = ? GROUP BY category_id",
+    incomes = db.execute("SELECT SUM(incomes.total) AS total, income_categories.name, income_categories.id FROM incomes JOIN income_categories ON incomes.category_id = income_categories.id WHERE incomes.user_id = ? GROUP BY category_id",
                           session["user_id"])
     
     # Calculate percentage of each category
@@ -241,30 +248,47 @@ def balance():
 
     categories.sort(key=get_percentage, reverse=True)
 
-    return render_template("balance.html", balance=balance, income_number=income_number, expenses=expenses, categories=categories)
+    return render_template("show-income.html", categories=categories)
 
 
-@app.route("/history")
+@app.route("/add-income", methods=["GET", "POST"])
 @login_required
-def history():
-    """Show user's records"""
+def income():
+    """Add an Income"""
 
-    # Consult database to find user's expenses and incomes
-    records = db.execute("SELECT expenses.date, expense_categories.name, expenses.total, expense_categories.icon FROM expenses JOIN expense_categories ON expense_categories.id = expenses.category_id WHERE user_id = ? UNION SELECT incomes.date, income_categories.name, incomes.total, income_categories.icon FROM incomes JOIN income_categories ON income_categories.id = incomes.category_id WHERE user_id = ? ORDER BY date DESC", session["user_id"], session["user_id"])
+    # GET
+    if request.method == "GET":
 
-    date = datetime.date.today()
+        # Get the income categories
+        categories = db.execute("SELECT * FROM income_categories ORDER BY name")
 
-    return render_template("history.html", records=records, date=date)
+        return render_template("add-income.html", categories=categories)
 
+    # POST
+    else:
+        amount = request.form.get("amount")
+        category_id = request.form.get("category")
+        date = request.form.get("date")
 
-@app.route("/category", methods=["GET", "POST"])
+        # Record the income
+        db.execute("INSERT INTO incomes (date, total, user_id, category_id) VALUES(?, ?, ?, ?)",
+                   date, amount, session["user_id"], category_id)
+        
+        # Update user's cash
+        db.execute("UPDATE users SET balance = balance + ? WHERE id = ?", amount, session["user_id"])
+        db.execute("UPDATE users SET total_income = total_income + ? WHERE id = ?", amount, session["user_id"])
+
+        return redirect("/balance")
+    
+
+@app.route("/add-category", methods=["GET", "POST"])
 @login_required
 def category():
     """Add custom category"""
 
     # GET
     if request.method == "GET":
-        return render_template("category.html")
+        return render_template("add-category.html")
     
     # POST
     else:
@@ -287,5 +311,18 @@ def category():
         #else:
             #return render_template("error.html", message="Incorrect Type")        
 
-        return redirect("/")
-    
+        return redirect("/")    
+
+
+@app.route("/history")
+@login_required
+def history():
+    """Show user's records"""
+
+    # Consult database to find user's expenses and incomes
+    records = db.execute("SELECT expenses.date, expense_categories.name, expenses.total, expense_categories.icon FROM expenses JOIN expense_categories ON expense_categories.id = expenses.category_id WHERE expenses.user_id = ? UNION SELECT incomes.date, income_categories.name, incomes.total, income_categories.icon FROM incomes JOIN income_categories ON income_categories.id = incomes.category_id WHERE incomes.user_id = ? ORDER BY date DESC", session["user_id"], session["user_id"])
+
+    date = datetime.date.today()
+
+    return render_template("history.html", records=records, date=date)
+

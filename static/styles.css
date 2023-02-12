@@ -320,3 +320,47 @@ body
 }
 
 /* End scrollbar */
+
+.container-exp-inc
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.total-categories
+{
+    font-family: 'Montserrat', sans-serif;
+}
+
+.container-main h1
+{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: .5rem;
+}
+
+.title
+{
+    padding: 30px;
+    text-align: center;
+}
+
+button
+{
+    background: black;
+    color: white;
+    width: 300px;
+    padding: 1rem;
+    border-radius: 100px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: background .5s;
+}
+
+button:hover
+{
+    background-color: rgba(0, 0, 0, .85);
+    cursor: pointer;
+}

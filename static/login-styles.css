@@ -149,13 +149,15 @@ body
     margin-top: 0;
 }
 
-input[type="color"]::-webkit-color-swatch-wrapper {
+input[type="color"]::-webkit-color-swatch-wrapper 
+{
 	padding: 0;
     height: 15px;
     width: auto;
 }
 
-input[type="color"]::-webkit-color-swatch {
+input[type="color"]::-webkit-color-swatch 
+{
 	border: none;    
     border-radius: 10px;
 }
@@ -263,7 +265,8 @@ input[type="color"]::-webkit-color-swatch {
     height: 47px;
     z-index: 12;
 }
-.select-menu .select-btn{
+.select-menu .select-btn
+{
     font-size: calc(1rem * .8);
     display: flex;
     height: 47px;    
@@ -275,11 +278,15 @@ input[type="color"]::-webkit-color-swatch {
     justify-content: space-between;
     box-shadow: 0 0 5px rgba(0,0,0,0.1);
 }
-.select-btn i{
+
+.select-btn i
+{
     font-size: 25px;
     transition: 0.3s;
 }
-.select-menu.active .select-btn i{
+
+.select-menu.active .select-btn i
+{
     transform: rotate(-180deg);
 }
 
@@ -303,7 +310,8 @@ input[type="color"]::-webkit-color-swatch {
     z-index: 12;
 }
 
-.select-menu .options{
+.select-menu .options
+{
     position: relative;
     padding: 15px;
     margin-top: 10px;
@@ -312,10 +320,14 @@ input[type="color"]::-webkit-color-swatch {
     box-shadow: 0 0 3px rgba(0,0,0,0.1);
     display: none;
 }
-.select-menu.active .options{
+
+.select-menu.active .options
+{
     display: block;
 }
-.options .option{
+
+.options .option
+{
     display: flex;
     height: 35px;
     cursor: pointer;
@@ -324,14 +336,20 @@ input[type="color"]::-webkit-color-swatch {
     align-items: center;
     background: #fff;
 }
-.options .option:hover{
+
+.options .option:hover
+{
     background: #F2F2F2;
 }
-.option i{
+
+.option i
+{
     font-size: 25px;
     margin-right: 12px;
 }
-.option .option-text{
+
+.option .option-text
+{
     font-size: calc(1rem * .9);
     color: #333;
 }
