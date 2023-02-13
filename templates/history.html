@@ -6,46 +6,44 @@
 
 {% block main %}
     <main class="main-index">
-        <div class="container-main">
-            <div class="table-container">
-                <table class="table table-size">
-                    <thead>
-                    <tr>
-                        <th scope="col">Date</th>
-                        <th scope="col">Category</th>
-                        <th scope="col">Amount</th>
-                    </tr>
-                    </thead>
-                    <tbody class="table-group-divider">
-                        <caption>List of expenses and income up to {{ date }}</caption>
-                        {% for record in records %}
-                            {% if record["total"] > 0 %}
-                            <tr class="table-success">
-                                <td class="table-center-text">{{ record["date"] }}</th>
-                                <td class="table-center-text-and-icons">                                
-                                    <span class="material-symbols-outlined" style="margin-right: 5px;">
-                                        {{ record["icon"] }}
-                                    </span>
-                                    {{ record["name"] }}
-                                </td>
-                                <td class="table-center-text">{{ record["total"]|usd }}</td>
-                            </tr>
-                            {% else %}
-                            <tr class="table-danger">
-                                <td class="table-center-text">{{ record["date"] }}</th>
-                                <td class="table-center-text-and-icons">                                
-                                    <span class="material-symbols-outlined" style="margin-right: 5px;">
-                                        {{ record["icon"] }}
-                                    </span>
-                                    {{ record["name"] }}
-                                </td>
-                                <td class="table-center-text">{{ record["total"]|usd }}</td>
-                            </tr>
-                            {% endif %}
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+        <div class="table-container">
+            <table class="table table-size">
+                <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Amount</th>
+                </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <caption>List of expenses and income up to {{ date }}</caption>
+                    {% for record in records %}
+                        {% if record["total"] > 0 %}
+                        <tr class="table-success">
+                            <td class="table-center-text">{{ record["date"] }}</th>
+                            <td class="table-center-text-and-icons">                                
+                                <span class="material-symbols-outlined" style="margin-right: 5px;">
+                                    {{ record["icon"] }}
+                                </span>
+                                {{ record["name"] }}
+                            </td>
+                            <td class="table-center-text">{{ record["total"]|usd }}</td>
+                        </tr>
+                        {% else %}
+                        <tr class="table-danger">
+                            <td class="table-center-text">{{ record["date"] }}</th>
+                            <td class="table-center-text-and-icons">                                
+                                <span class="material-symbols-outlined" style="margin-right: 5px;">
+                                    {{ record["icon"] }}
+                                </span>
+                                {{ record["name"] }}
+                            </td>
+                            <td class="table-center-text">{{ record["total"]|usd }}</td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </main>
 {% endblock %}

@@ -141,6 +141,17 @@ body
     transition: background .5s;
 }
 
+input[type=password]:not(:placeholder-shown) 
+{
+    font-family: 'pass', 'Roboto', Helvetica, Arial, sans-serif;
+    font-size: 20px;
+}
+
+.inner-text-dropdown
+{
+    margin-left: 10px;
+}
+
 #text-color
 {
     font-size: calc(1rem * .8);
@@ -265,6 +276,7 @@ input[type="color"]::-webkit-color-swatch
     height: 47px;
     z-index: 12;
 }
+
 .select-menu .select-btn
 {
     font-size: calc(1rem * .8);
@@ -313,7 +325,7 @@ input[type="color"]::-webkit-color-swatch
 .select-menu .options
 {
     position: relative;
-    padding: 15px;
+    padding: 11px 14px 11px;
     margin-top: 10px;
     border-radius: 8px;
     background: #fff;
@@ -335,6 +347,8 @@ input[type="color"]::-webkit-color-swatch
     border-radius: 8px;
     align-items: center;
     background: #fff;
+    margin-block: 3px;
+    margin-right: 18px;
 }
 
 .options .option:hover
@@ -394,14 +408,14 @@ input[type="color"]::-webkit-color-swatch
 .options::-webkit-scrollbar 
 {
     width: 1em;
-    background-color: white;
+    background-color: transparent;
     margin-block: 1em;
 }
   
 .options::-webkit-scrollbar-track 
 {
-    background: transparent;
-    margin-block: 1em;
+    background: white;
+    margin-block: .8em;
 }
 
 .options::-webkit-scrollbar-thumb 

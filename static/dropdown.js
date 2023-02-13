@@ -38,7 +38,7 @@ fields.forEach(function(element){
     element.addEventListener('click', function(){    
         // Return to normal class
         let inputCategory2 = document.querySelector("#categories-dropdown");
-        inputCategory2.className = "select-menu";
+        inputCategory2.className = "form-item";
 
         let inputCategory3 = document.getElementById('2');
         inputCategory3.className = "select-menu";

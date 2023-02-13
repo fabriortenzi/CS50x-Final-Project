@@ -1,11 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Poppins:wght@300;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Poppins:wght@300;400;500&display=swap');
 
 
 body
 {
-    background: linear-gradient(to right, #712cf9, #9220f6);
+    background: #BE93FC;
     margin: 0;
     user-select: none;
+    overflow: overlay;
 }
 
 .logo
@@ -146,7 +147,7 @@ body
     height: 150px;
     background: #c9c9c9;
     border-radius: 50%;
-    margin: 20px;
+    margin: 4px 20px 20px;
 }
 
 .circle-wrap .circle .mask 
@@ -159,7 +160,7 @@ body
     width: 124px;
     height: 124px;
     border-radius: 50%;
-    background: linear-gradient(to right, #712cf9, #9220f6);;
+    background: #BE93FC;
     line-height: 120px;
     text-align: center;
     margin-top: 13px;
@@ -169,14 +170,6 @@ body
     z-index: 100;
     font-weight: 500;
     font-size: 2em;
-}
-
-.inside-circle-transp
-{
-    background: rgba(255, 255, 255, .5);
-    width: 124px;
-    height: 124px;
-    border-radius: 50%;
 }
 
 /* End progress bar */
@@ -212,7 +205,6 @@ body
     padding-left: 60px;
     padding-right: 60px;
     margin: 0;
-    height: 100vh;
 }
 
 .table-center-text
@@ -271,8 +263,8 @@ body
 
 .main-index
 {
-    background: linear-gradient(to right, #712cf9, #9220f6);
-    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
 }
 
 .container-main
@@ -303,29 +295,47 @@ body
 ::-webkit-scrollbar 
 {
     width: 1em;
-    background: rgba(164, 158, 158, 0.4);
+    background: transparent;
 }
   
 ::-webkit-scrollbar-track 
 {
-    background: rgba(193, 193, 193, 0.2);
-    margin-block: .5em;
+    background: #BE93FC;
+    margin-top: calc(72px + .5em);
+    margin-bottom: .5em;
 }
 
 ::-webkit-scrollbar-thumb 
 {
-    background: rgba(143, 143, 143, 0.7);
-    border-radius: 100vw;    
-    margin-block: 0.5em;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 100vw;
+}
+
+::-webkit-scrollbar-thumb:hover 
+{
+    background: rgba(255, 255, 255, .5);
 }
 
 /* End scrollbar */
 
-.container-exp-inc
+.center-numb-button
 {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
+}
+
+.container-exp
+{
+    width: 50%;
+    float: left;
+}
+
+.container-inc
+{
+    width: 50%;
+    float: right;
 }
 
 .total-categories
@@ -333,7 +343,7 @@ body
     font-family: 'Montserrat', sans-serif;
 }
 
-.container-main h1
+h1
 {
     font-family: 'Montserrat', sans-serif;
     font-size: 2rem;

@@ -7,20 +7,18 @@
 {% block main %}
 
     <main class="main-index">
-        <div class="container-main">
-            <h1 class="title">Welcome, {{record[0]["username"]}}!</h1>
-            <h1 class="title">Your Balance is {{record[0]["balance"]|usd}}</h1>
-            <div class="container-exp-inc">
-                <h5 class="total-categories">Total Expenses: {{record[0]["total_expenses"]|usd}}</p>
-                <h5 class="total-categories">Total Income: {{record[0]["total_income"]|usd}}</p>
+        <h1 class="title">Welcome, {{record[0]["username"]}}!</h1>
+        <h1 class="title">Your Balance is {{((record[0]["total_income"]|int)-(record[0]["total_expenses"]|int))|usd}}</h1>
+        <form action="/" method="post">
+            <div class="container-exp center-numb-button">
+                <p class="total-categories">Total Expenses: {{record[0]["total_expenses"]|usd}}</p>
+                <button name="type" type="sumbit" value="expenses">Show Expenses</button>
             </div>
-            <form action="/" method="post">
-                <div class="container-exp-inc">
-                    <button name="type" type="sumbit" value="expenses">Show Expenses</button>
-                    <button name="type" type="sumbit" value="income">Show Income</button>
-                </div>
-            </form>
-        </div>
+            <div class="container-inc center-numb-button">
+                <p class="total-categories">Total Income: {{record[0]["total_income"]|usd}}</p>
+                <button name="type" type="sumbit" value="income">Show Income</button> 
+            </div>
+        </form>
     </main>
 
 {% endblock %}

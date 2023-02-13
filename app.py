@@ -117,7 +117,10 @@ def index():
     if request.method == "GET":
 
         # Get user's info
-        record = db.execute("SELECT username, balance, total_expenses, total_income FROM users WHERE id = ?", session["user_id"])
+        record = db.execute("SELECT username, total_expenses, total_income FROM users WHERE id = ?", session["user_id"])
+        
+        # Show total expenses as a positive number
+        record[0]["total_expenses"] = -int(record[0]["total_expenses"])
         
         return render_template("index.html", record=record)
 
@@ -140,8 +143,7 @@ def index():
 def showExpenses():
     
     # Consult database for expense categories
-    categories = db.execute("SELECT * FROM expense_categories WHERE user_id IS NULL OR user_id = ? ORDER BY name",
-                            session["user_id"])
+    categories = db.execute("SELECT * FROM expense_categories WHERE user_id IS NULL OR user_id = ?", session["user_id"])
 
     for category in categories:
         category["percentage"] = 0
@@ -150,9 +152,9 @@ def showExpenses():
     # Consult database for user's expenses
     expenses = db.execute("SELECT SUM(expenses.total) AS total, expense_categories.name, expense_categories.id FROM expenses JOIN expense_categories ON expenses.category_id = expense_categories.id WHERE expenses.user_id = ? GROUP BY category_id",
                           session["user_id"])
-
-    print(expenses)
     
+    print(expenses)
+   
     # Calculate percentage of each category
     sum = 0
     for i in range(len(expenses)):
@@ -184,8 +186,6 @@ def expense():
         # Get the expense categories
         categories = db.execute("SELECT * FROM expense_categories WHERE user_id IS NULL OR user_id = ? ORDER BY name",
                                 session["user_id"])
-        
-        print(categories)
 
         date = datetime.date.today()
 
@@ -201,16 +201,15 @@ def expense():
             #return render_template("error.html", message="Some inputs were left blank")
         
         amount = -int(amount)
-        
-        #category_db = db.execute("SELECT name FROM expense_categories WHERE name = ?", category)
-        #if len(category_db) != 0:
-            #return render_template("error.html", message="The Category is already added")
 
         category_id = db.execute("SELECT id FROM expense_categories WHERE name = ?", category)
         category_id = category_id[0]["id"]
 
         db.execute("INSERT INTO expenses (date, total, user_id, category_id) VALUES(?, ?, ?, ?)",
                    date, amount, session["user_id"], category_id)
+        
+        db.execute("UPDATE users SET total_expenses = total_expenses + ? WHERE id = ?",
+                   amount, session["user_id"])
 
         return redirect("/")   
 
@@ -221,7 +220,7 @@ def showIncome():
     """Show user's income"""
 
     # Consult database for income categories
-    categories = db.execute("SELECT * FROM income_categories")
+    categories = db.execute("SELECT * FROM income_categories WHERE user_id IS NULL OR user_id = ?", session["user_id"])
 
     for category in categories:
         category["percentage"] = 0
@@ -260,25 +259,32 @@ def income():
     if request.method == "GET":
 
         # Get the income categories
-        categories = db.execute("SELECT * FROM income_categories ORDER BY name")
+        categories = db.execute("SELECT * FROM income_categories WHERE user_id IS NULL OR user_id = ? ORDER BY name",
+                                session["user_id"])
 
-        return render_template("add-income.html", categories=categories)
+        date = datetime.date.today()
+
+        return render_template("add-income.html", categories=categories, date=date)
 
     # POST
     else:
         amount = request.form.get("amount")
-        category_id = request.form.get("category")
+        category = request.form.get("category")
         date = request.form.get("date")
+        
+        #if not amount or not category or not date:
+            #return render_template("error.html", message="Some inputs were left blank")
 
-        # Record the income
+        category_id = db.execute("SELECT id FROM income_categories WHERE name = ?", category)
+        category_id = category_id[0]["id"]
+
         db.execute("INSERT INTO incomes (date, total, user_id, category_id) VALUES(?, ?, ?, ?)",
                    date, amount, session["user_id"], category_id)
         
-        # Update user's cash
-        db.execute("UPDATE users SET balance = balance + ? WHERE id = ?", amount, session["user_id"])
-        db.execute("UPDATE users SET total_income = total_income + ? WHERE id = ?", amount, session["user_id"])
+        db.execute("UPDATE users SET total_income = total_income + ? WHERE id = ?",
+                   amount, session["user_id"])
 
-        return redirect("/balance")
+        return redirect("/")   
     
 
 @app.route("/add-category", methods=["GET", "POST"])
@@ -299,7 +305,11 @@ def category():
         #if not name or not color or not type_cat:
             #return render_template("error.html", message="Some inputs were left blank")
         
-        name = capwords(name)
+        name = capwords(name)        
+        
+        #category_db = db.execute("SELECT name FROM expense_categories WHERE name = ?", category)
+        #if len(category_db) != 0:
+            #return render_template("error.html", message="The Category is already added")
 
         # Record Category
         if type_cat == "expense":
