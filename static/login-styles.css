@@ -90,7 +90,9 @@ body
 
 .login-card-form .form-item
 {
-    position: relative;
+    position: relative;    
+    transition: background .5s;
+    border-radius: 100px;
 }
 
 .login-card-form .form-item .form-item-icon
@@ -99,7 +101,7 @@ body
     top: .82rem;
     left: 1.4rem;
     font-size: 1.3rem;
-    opacity: .4;
+    opacity: .4;    
 }
 
 .login-card-form .checkbox
@@ -149,7 +151,10 @@ input[type=password]:not(:placeholder-shown)
 
 .inner-text-dropdown
 {
-    margin-left: 10px;
+    position: relative;
+    top: 0px;
+    left: 40px;
+
 }
 
 #text-color
@@ -289,6 +294,14 @@ input[type="color"]::-webkit-color-swatch
     cursor: pointer;
     justify-content: space-between;
     box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    transition: background .5s;
+}
+
+.select-menu.active .select-btn .inner-text-dropdown
+{
+    position: relative;
+    top: 0;
+    left: 16px;
 }
 
 .select-btn i
@@ -364,8 +377,9 @@ input[type="color"]::-webkit-color-swatch
 
 .option .option-text
 {
-    font-size: calc(1rem * .9);
+    font-size: calc(1rem * .8);
     color: #333;
+    margin-left: 13px;
 }
 
 .container-icon-text
@@ -430,3 +444,35 @@ input[type="color"]::-webkit-color-swatch
 }
 
 /* End scrollbar dropdown */
+
+/* error.html */
+
+.box-error
+{
+    width: 400px;
+    background: rgba(255, 255, 255, .5);
+    padding: 3rem;
+    border-radius: 10px;
+}
+
+.logo-error
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.text-error
+{
+    width: auto;
+    margin: 0 0 0 10px;
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+
+.message-error
+{
+    margin-top: 30px;
+    text-align: center;
+    opacity: .8;
+}

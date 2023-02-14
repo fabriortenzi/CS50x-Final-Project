@@ -26,16 +26,19 @@
                 <ul class="options">
                     {% for i in range(categories|length) %}
                     <li class="option">
-                        <span class="material-symbols-outlined" style="margin-right: 5px;">{{categories[i]["icon"]}}</span>
+                        <span class="material-symbols-outlined" style="font-size: 20px; margin-left: 3px ;margin-right: 5px;">{{categories[i]["icon"]}}</span>
                         <span class="option-text">{{categories[i]["name"]}}</span>
                     </li>
                     {% endfor %}
                 </ul>
             </div>
         </div>      
-        <div class="form-item" id="3">
-            <span class="form-item-icon material-symbols-rounded">calendar_month</span>
-            <input type="date" name="date" max="{{date}}" unselectable="on" id="input-date">
+        <div class="cont-text-date">
+            <p id="text-color">Choose a Date</p>  
+            <div class="form-item" id="3">
+                <span class="form-item-icon material-symbols-rounded" id="7">calendar_month</span>
+                <input type="date" name="date" max="{{date}}" id="input-date" required>
+            </div>  
         </div>        
         <div id="input-category-container">
             <input type="text" value="" name="category" id="input-category">

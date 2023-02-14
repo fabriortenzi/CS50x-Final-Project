@@ -55,12 +55,18 @@ def login():
         username = request.form.get("username")
         password = request.form.get("password")
 
+        # Check for blank inputs
+        if not username or not password:
+            return render_template("error.html", message="Some inputs were left blank")
+
         # Query database for username
         rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
 
         # Ensure username exists and password is correct
-        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
-            return ("invalid username and/or password")
+        if len(rows) != 1:
+            return render_template("error.html", message="Username does not exist")        
+        if not check_password_hash(rows[0]["hash"], request.form.get("password")):
+            return render_template("error.html", message="Incorrect password")
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]        
@@ -83,13 +89,15 @@ def signup():
         password = request.form.get("password")
         confirmation = request.form.get("confirmation")
 
-        if db.execute("SELECT username FROM users WHERE username = ?", username):
-            return redirect("/")
-            # Complete
+        # Check for blank inputs
+        if not username or not password or not confirmation:
+            return render_template("error.html", message="Some inputs were left blank")
 
+        # Check for unrepeated username and password's match
+        if db.execute("SELECT username FROM users WHERE username = ?", username):
+            return render_template("error.html", message="Username already exists")
         if password != confirmation:
-            return redirect("/")
-            # Complete
+            return render_template("error.html", message="Passwords no dot match")
         
         db.execute("INSERT INTO users (username, hash) VALUES(?, ?)",
                    username, generate_password_hash(password, method='pbkdf2:sha256', salt_length=8))
@@ -129,13 +137,16 @@ def index():
 
         type_button = request.form.get("type")
 
-        if type_button == "expense":
+        # Check for blank inputs
+        if not type_button:
+            return render_template("error.html", message="Some inputs were left blank")
+
+        if type_button == "expenses":
             return redirect("/show-expenses")
         elif type_button == "income":
             return redirect("/show-income")
         else:
-            # Complete with error
-            return redirect("/show-expenses")
+            return render_template("error.html", message="Invalid Type")
 
 
 @app.route("/show-expenses")
@@ -152,9 +163,7 @@ def showExpenses():
     # Consult database for user's expenses
     expenses = db.execute("SELECT SUM(expenses.total) AS total, expense_categories.name, expense_categories.id FROM expenses JOIN expense_categories ON expenses.category_id = expense_categories.id WHERE expenses.user_id = ? GROUP BY category_id",
                           session["user_id"])
-    
-    print(expenses)
-   
+       
     # Calculate percentage of each category
     sum = 0
     for i in range(len(expenses)):
@@ -197,8 +206,19 @@ def expense():
         category = request.form.get("category") 
         date = request.form.get("date")   
 
-        #if not amount or not category or not date:
-            #return render_template("error.html", message="Some inputs were left blank")
+        # Check for blank inputs
+        if not amount or not category or not date:
+            return render_template("error.html", message="Some inputs were left blank")  
+        
+        # Convert amount to float
+        try:
+            amount = float(amount)
+        except:
+            return render_template("error.html", message="Amount is not a positive number")
+
+        # Check if it is a positive number
+        if amount <= 0:
+            return render_template("error.html", message="Amount is not a positive number")
         
         amount = -int(amount)
 
@@ -272,8 +292,19 @@ def income():
         category = request.form.get("category")
         date = request.form.get("date")
         
-        #if not amount or not category or not date:
-            #return render_template("error.html", message="Some inputs were left blank")
+        # Check for blank inputs
+        if not amount or not category or not date:
+            return render_template("error.html", message="Some inputs were left blank")  
+        
+        # Convert amount to float
+        try:
+            amount = float(amount)
+        except:
+            return render_template("error.html", message="Amount is not a positive number")
+
+        # Check if it is a positive number
+        if amount <= 0:
+            return render_template("error.html", message="Amount is not a positive number")
 
         category_id = db.execute("SELECT id FROM income_categories WHERE name = ?", category)
         category_id = category_id[0]["id"]
@@ -302,24 +333,28 @@ def category():
         color = request.form.get("color")
         type_cat = request.form.get("type")
 
-        #if not name or not color or not type_cat:
-            #return render_template("error.html", message="Some inputs were left blank")
+        if not name or not color or not type_cat:
+            return render_template("error.html", message="Some inputs were left blank")
         
-        name = capwords(name)        
-        
-        #category_db = db.execute("SELECT name FROM expense_categories WHERE name = ?", category)
-        #if len(category_db) != 0:
-            #return render_template("error.html", message="The Category is already added")
+        name = capwords(name) 
 
         # Record Category
         if type_cat == "expense":
-            db.execute("INSERT INTO expense_categories (name, icon, color, user_id) VALUES(?, ?, ?, ?)", 
-                       name, "add", color, session["user_id"])     
+            # Check if the category was previously added
+            try:
+                db.execute("INSERT INTO expense_categories (name, icon, color, user_id) VALUES(?, ?, ?, ?)", 
+                           name, "add", color, session["user_id"]) 
+            except:
+                return render_template("error.html", message="The Category was already added")
         elif type_cat == "income":
-            db.execute("INSERT INTO income_categories (name, icon, color, user_id) VALUES(?, ?, ?, ?)", 
-                       name, "add", color, session["user_id"]) 
-        #else:
-            #return render_template("error.html", message="Incorrect Type")        
+            # Check if the category was previously added
+            try:
+                db.execute("INSERT INTO income_categories (name, icon, color, user_id) VALUES(?, ?, ?, ?)", 
+                           name, "add", color, session["user_id"]) 
+            except:
+                return render_template("error.html", message="The Category was already added")
+        else:
+            return render_template("error.html", message="Incorrect Type")        
 
         return redirect("/")    
 

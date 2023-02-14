@@ -1,4 +1,9 @@
 // Dropdown
+
+let pressed;
+let pressed2;
+let pressed3;
+
 const optionMenu = document.querySelector(".select-menu"),
        selectBtn = optionMenu.querySelector(".select-btn"),
        options = optionMenu.querySelectorAll(".option"),
@@ -12,10 +17,10 @@ options.forEach(option =>{
         let selectedOption = option.querySelector(".option-text").innerText;
         document.getElementById('4').innerHTML = selectedOption;
 
-        optionMenu.classList.remove("active");
+        // Return to normal class   
+        pressed = true;
 
         document.getElementById('input-category').value = selectedOption;
-
     });
 });
 
@@ -25,6 +30,21 @@ let inputCategory = document.querySelector("#categories-dropdown");
 inputCategory.addEventListener('click', function() {
     // Change the class of the dropdown to make the focus effect
     inputCategory.className = "input-category-focus";
+
+    document.getElementById('2').classList.add("select-menu", "active");
+
+    // Change state
+    if (pressed == true)
+    {
+        let inputCategory5 = document.getElementById("categories-dropdown");
+        inputCategory5.className = "form-item";
+
+        let inputCategory6 = document.getElementById('2');
+        inputCategory6.className = "select-menu";
+
+        pressed = false;
+    }
+
 });
 
 
@@ -44,14 +64,3 @@ fields.forEach(function(element){
         inputCategory3.className = "select-menu";
     });
 });
-
-
-// Date
-let date = document.getElementById('3');
-date.addEventListener('click', function(){
-    document.getElementById('1').focus();
-    
-    console.log('hola');
-});
-
-
