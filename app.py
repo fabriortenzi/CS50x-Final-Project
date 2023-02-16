@@ -341,17 +341,17 @@ def category():
         # Record Category
         if type_cat == "expense":
             # Check if the category was previously added
-            try:
+            if not db.execute("SELECT id FROM expense_categories WHERE name = ? AND user_id = ?", name, session["user_id"]):
                 db.execute("INSERT INTO expense_categories (name, icon, color, user_id) VALUES(?, ?, ?, ?)", 
                            name, "add", color, session["user_id"]) 
-            except:
+            else:
                 return render_template("error.html", message="The Category was already added")
         elif type_cat == "income":
             # Check if the category was previously added
-            try:
+            if not db.execute("SELECT id FROM income_categories WHERE name = ? AND user_id = ?", name, session["user_id"]):
                 db.execute("INSERT INTO income_categories (name, icon, color, user_id) VALUES(?, ?, ?, ?)", 
                            name, "add", color, session["user_id"]) 
-            except:
+            else:
                 return render_template("error.html", message="The Category was already added")
         else:
             return render_template("error.html", message="Incorrect Type")        
