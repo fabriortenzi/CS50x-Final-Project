@@ -1,8 +1,6 @@
 // Dropdown
 
 let pressed;
-let pressed2;
-let pressed3;
 
 const optionMenu = document.querySelector(".select-menu"),
        selectBtn = optionMenu.querySelector(".select-btn"),
