@@ -155,7 +155,7 @@ def showExpenses():
     
     # Consult database for expense categories
     categories = db.execute("SELECT * FROM expense_categories WHERE user_id IS NULL OR user_id = ?", session["user_id"])
-
+        
     for category in categories:
         category["percentage"] = 0
         category["degree"] = 0
@@ -163,7 +163,7 @@ def showExpenses():
     # Consult database for user's expenses
     expenses = db.execute("SELECT SUM(expenses.total) AS total, expense_categories.name, expense_categories.id FROM expenses JOIN expense_categories ON expenses.category_id = expense_categories.id WHERE expenses.user_id = ? GROUP BY category_id",
                           session["user_id"])
-       
+               
     # Calculate percentage of each category
     sum = 0
     for i in range(len(expenses)):
@@ -222,7 +222,7 @@ def expense():
         
         amount = -int(amount)
 
-        category_id = db.execute("SELECT id FROM expense_categories WHERE name = ?", category)
+        category_id = db.execute("SELECT id FROM expense_categories WHERE name = ? AND (user_id IS NULL or user_id = ?)", category, session["user_id"])
         category_id = category_id[0]["id"]
 
         db.execute("INSERT INTO expenses (date, total, user_id, category_id) VALUES(?, ?, ?, ?)",
@@ -306,7 +306,7 @@ def income():
         if amount <= 0:
             return render_template("error.html", message="Amount is not a positive number")
 
-        category_id = db.execute("SELECT id FROM income_categories WHERE name = ?", category)
+        category_id = db.execute("SELECT id FROM income_categories WHERE name = ? AND (user_id IS NULL or user_id = ?)", category, session["user_id"])
         category_id = category_id[0]["id"]
 
         db.execute("INSERT INTO incomes (date, total, user_id, category_id) VALUES(?, ?, ?, ?)",
